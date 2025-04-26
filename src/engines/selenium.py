@@ -1,0 +1,623 @@
+# -*- coding: utf-8 -*-
+"""
+
+Chrome  : chromedriver  - chromedriver.chromium.org
+Firefox : geckodriver   - github.com/mozilla/geckodriver
+"""
+
+from selenium import webdriver
+from selenium.webdriver.firefox.options import Options
+from selenium.webdriver.firefox.firefox_profile import FirefoxProfile
+from selenium.webdriver.firefox.service import Service
+
+from selenium.webdriver.common.by import By
+# from selenium.webdriver.common.action_chains import ActionChains
+
+from selenium.webdriver.support.wait import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+# from selenium.webdriver.common.keys import Keys
+
+from selenium.common.exceptions import (
+    TimeoutException,
+    NoSuchElementException
+)
+
+from selenium.webdriver.remote.webelement import WebElement
+
+
+from time import sleep
+import re
+
+from src.engines.base import Base
+
+from src.models import (
+        Comic,
+        Chapter,
+        ImageChapter
+    )
+
+from src.pathclass import PathClass
+from src.errorhandlerdecorator import register_error
+from src.status import Status
+
+
+from src.utils import normalize_number
+
+
+from uuid import uuid4
+
+from typing import (
+        List,
+        Union,
+        Literal,
+    )
+
+
+FilterTypes = Literal["id", "xpath", "tag_name", "css_selector"]
+
+
+class Selenium(Base):
+    """
+    """
+
+    def __init__(
+        self,
+        geckodriver: str,
+        show: bool = True,
+        setup: bool = True,
+        status: Status = None,
+    ) -> None:
+        """
+        """
+        self.driver = None
+        self.show = show
+        self.status = status
+
+        self.geckodriver = geckodriver
+
+        if setup:
+            self.setup()
+
+        sleep(1)
+
+    def close(self) -> None:
+        """
+        """
+        if self.driver is not None:
+            self.driver.close()
+            self.driver = None
+
+    @register_error("setup")
+    def setup(self) -> None:
+        """
+        """
+        servicio = Service(executable_path=self.geckodriver)
+
+        user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+
+        op = Options()
+        profile = FirefoxProfile()
+
+        ######### Chrome
+        # if self.show is False:
+        #     op.add_argument('--headless')
+        # op.add_argument('--disable-gpu')
+        # op.add_argument('--blink-settings=imagesEnabled=false')
+        # user-agent
+        # op.add_argument(f'user-agent={user_agent}')
+        # avoid cloudflare
+        # op.add_argument('--disable-blink-features=AutomationControlled')
+        # op.set_preference('useAutomationExtension', False)
+        ######### Chrome
+
+        # Firefox
+        # change user-agent
+        profile.set_preference('general.useragent.override', user_agent)
+        # disable pop-ups
+        profile.set_preference("dom.webnotifications.enabled", False)
+        # don't load images
+        profile.set_preference("permissions.default.image", 2)
+        # disable audio
+        profile.set_preference("media.volume_scale", "0.0")
+        # avoid webdriver detection
+        profile.set_preference("dom.webdriver.enabled", False)
+        # prevents device information from being sent
+        profile.set_preference("media.navigator.enabled", False)
+        # nothing
+        profile.set_preference("useAutomationExtension", False)
+
+        # Helps prevent real IP leaks and reduces fingerprinting vectors.
+        profile.set_preference("media.peerconnection.enabled", False)
+        # protection against tracking
+        profile.set_preference("privacy.trackingprotection.enabled", True)
+        # webpage loading strategy
+        profile.set_preference("webdriver.load.strategy", "normal")
+
+        # disable console logs
+        profile.set_preference("devtools.console.stdout.content", False)
+
+        # sets profice to Options
+        op.profile = profile
+
+        # enable GUI
+        if self.show is False:
+            op.add_argument("--headless")
+
+        # create the driver
+        self.driver = webdriver.Firefox(options=op, service=servicio)
+        self.driver.set_window_size(1280, 720)
+
+        # deletes `navigator.webdriver` attribute
+        self.driver.execute_script(
+            "Object.defineProperty(navigator, 'webdriver', {get: () => undefined})"
+        )
+
+        self.driver.execute_script("""
+            Object.defineProperty(navigator, 'plugins', {
+                get: () => [1, 2, 3],
+            });
+            Object.defineProperty(navigator, 'languages', {
+                get: () => ['en-US', 'en'],
+            });
+        """)
+
+        # hardwareConcurrency, maxTouchPoints
+        self.driver.execute_script("""
+            Object.defineProperty(navigator, 'hardwareConcurrency', {
+              get: () => 8,
+            });
+            Object.defineProperty(navigator, 'maxTouchPoints', {
+              get: () => 1,
+            });
+        """)
+
+        # spoof WebGL vendor/renderer
+        self.driver.execute_script("""
+            const getParameter = WebGLRenderingContext.prototype.getParameter;
+            WebGLRenderingContext.prototype.getParameter = function(parameter){
+              if(parameter === 37445) return "Intel Inc.";
+              if(parameter === 37446) return "Intel Iris OpenGL Engine";
+              return getParameter(parameter);
+            };
+        """)
+
+        # Canvas fingerprint spoof
+        self.driver.execute_script("""
+            const getImageData = CanvasRenderingContext2D.prototype.getImageData;
+            CanvasRenderingContext2D.prototype.getImageData = function() {
+              const data = getImageData.apply(this, arguments);
+              data.data[0] += 1; // tiny change
+              return data;
+            };
+        """)
+
+        # self.driver.get("https://bot.sannysoft.com/")
+        # print("Headless:", self.driver.capabilities.get("moz:headless"))
+        # self.driver.save_screenshot(f"{uuid4()}.png")
+
+    def wait_for_element(
+        self,
+        type: List[FilterTypes],
+        html_element: str
+    ) -> Union[WebElement, None]:
+        """
+        """
+        filter = {
+            "id": By.ID,
+            "xpath": By.XPATH,
+            "tag_name": By.TAG_NAME,
+            "css_selector": By.CSS_SELECTOR
+        }
+
+        try:
+            filter_type = filter[type]
+            element = WebDriverWait(self.driver, 10).until(
+                EC.presence_of_element_located(
+                    (filter_type, html_element)
+                )
+            )
+            return element
+        except (KeyError, TimeoutException):
+            return None
+
+    def wait_to_load_content_change_tab(
+        self,
+        element: str,
+        time: int = 10
+    ) -> None:
+        """
+        """
+        WebDriverWait(self.driver, time).until(
+                            lambda driver: len(driver.window_handles) > 1
+                        )
+
+        # print("> wait_to_load_content_change_tab", self.driver.window_handles)
+
+        last_tab = self.driver.window_handles[-1]
+
+        self.driver.switch_to.window(last_tab)
+
+        # headless check change to new tab
+        # self.driver.save_screenshot(f"{uuid4()}.png")
+
+        for i in range(0, 3):
+
+            if self.driver.current_url.endswith("/paginated"):
+                self.driver.get(
+                        self.driver.current_url.replace("/paginated", "/cascade")
+                    )
+
+            item = self.wait_for_element(
+                        type="css_selector",
+                        html_element=element
+                    )
+
+            # print("> ", item, self.driver.current_url)
+
+            if item is not None:
+                return
+
+            sleep(0.3)
+
+    def element_find_elements(
+        self,
+        element: WebElement,
+        selectors: list
+    ) -> list:
+        """
+        Searches for elements using a `WebElement` parent element and CSS
+        selector, returns a list with elements inside the parent element.
+        """
+        for i in range(0, 3):
+            for selector in selectors:
+                results = element.find_elements(
+                                        By.CSS_SELECTOR,
+                                        selector
+                                    )
+                # print(selector, results)
+                if results != []:
+                    return results
+                sleep(0.5)
+        return []
+
+    def iterator_find_elements(
+        self,
+        type: List[FilterTypes],
+        selectors: list
+    ) -> Union[WebElement, None]:
+        """
+        Searches for a `WebElement` parent element using a list of CSS
+        selectors.
+        """
+        for selector in selectors:
+            element = self.wait_for_element(
+                        type="css_selector",
+                        html_element=selector
+                    )
+            if element is not None:
+                return element
+        return None
+
+    def wait_for_element(
+        self,
+        type: List[FilterTypes],
+        html_element: str,
+        time: int = 10
+    ) -> Union[WebElement, None]:
+        """
+        """
+        filter = {
+            "id": By.ID,
+            "xpath": By.XPATH,
+            "tag_name": By.TAG_NAME,
+            "css_selector": By.CSS_SELECTOR
+        }
+
+        try:
+            filter_type = filter[type]
+            element = WebDriverWait(self.driver, time).until(
+                EC.presence_of_element_located(
+                    (filter_type, html_element)
+                )
+            )
+            return element
+        except (KeyError, TimeoutException):
+            return None
+
+    @register_error("search")
+    def search(
+        self,
+        string: str,
+        webclass: object
+    ) -> list:
+        """
+        """
+        results = []
+
+        url = webclass.search_url.replace("NONE", string.replace(" ", "+"))
+
+        print("> search", url)
+
+        self.driver.get(url)
+
+        sleep(0.5)
+
+        div_content_comics = self.wait_for_element(
+                                type="css_selector",
+                                html_element=webclass.content_page_divs_css
+                            )
+
+        if div_content_comics is not None:
+            items_list = div_content_comics.find_elements(
+                                                By.CSS_SELECTOR,
+                                                webclass.items_comic_css
+                                            )
+
+            for item in items_list:
+                info_item = item.find_element(
+                        By.CSS_SELECTOR,
+                        webclass.info_comic_css
+                    )
+
+                name = info_item.get_attribute("innerText")
+                link = info_item.get_attribute("href")
+
+
+                comic = Comic(
+                        name=name.split("\n")[0],
+                        link=link
+                    )
+                results.append(comic)
+
+        return results
+
+    @register_error("get_chapters")
+    def get_chapters(
+        self,
+        comic: Comic,
+        webclass: object,
+        n_chapters: int = None,
+        range: List[int] = None
+    ) -> Comic:
+        """
+        Gets chapters of `Comic` instance.
+        Important: `n_chapters` has precedence over `range` parameter.
+
+        Args:
+            comic: `Comic` instance.
+            webclass: engine to get data.
+            n_chapters: positive integer to limit the number of chapters.
+            range: list of two positives integers, sets range of chapters to
+                   get, for example [1, 10].
+
+        Returns:
+            comic: `Comic` instance with updated chapters.
+        """
+        if comic.link:
+            self.driver.get(comic.link)
+
+            self.status.comic_name = comic.name
+
+            chapters_ul_list = self.iterator_find_elements(
+                                type="css_selector",
+                                selectors=webclass.chapters_content_ul_class
+                            )
+
+
+            try:
+                button_show_ = chapters_ul_list.find_elements(
+                                                By.CSS_SELECTOR,
+                                                webclass.button_show_all_chapters
+                                            )
+                button_show_.click()
+
+                sleep(0.5)
+            except Exception as e:
+                pass
+
+            list_chapters = self.element_find_elements(
+                                                element=chapters_ul_list,
+                                                selectors=webclass.chapter_css
+                                            )
+
+            print("list_chapters ", len(list_chapters))
+
+            if n_chapters is not None:
+                chapters_comic = list_chapters[:abs(n_chapters)]
+                self.iterate_chapters(
+                                        comicObj=comic,
+                                        webclass=webclass,
+                                        list_chapters=chapters_comic
+
+                                    )
+
+            elif range is not None:
+                chapters_comic = list_chapters[range[0], range[1]]
+                self.iterate_chapters(
+                                        comicObj=comic,
+                                        webclass=webclass,
+                                        list_chapters=chapters_comic
+                                    )
+
+            else:
+                self.iterate_chapters(
+                                        comicObj=comic,
+                                        webclass=webclass,
+                                        list_chapters=list_chapters
+                                    )
+            return comic
+
+    @register_error("iterate_chapters")
+    def iterate_chapters(
+        self,
+        comicObj: Comic,
+        webclass: object,
+        list_chapters: List[Chapter]
+    ) -> None:
+        """
+        """
+        print("> iterate_chapters ")
+
+        chapters_comic_list = []
+        n_chapters = len(list_chapters)
+
+        # main tab of driver
+        main_tab_ = self.driver.current_window_handle
+
+        for li_item_ in list_chapters:
+
+            try:
+                a_item_ = li_item_.find_element(
+                                            By.CSS_SELECTOR,
+                                            webclass.chaper_name_class
+                                        )
+
+            except NoSuchElementException as e:
+                a_item_ = li_item_.find_element(
+                                            By.TAG_NAME,
+                                            "div"
+                                        )
+
+            name_chapter = a_item_.get_attribute("innerText").strip()
+
+            try:
+                link_item_ = li_item_.find_element(By.CSS_SELECTOR, webclass.chapter_link_class)
+                link_chapter = link_item_.get_attribute("href").strip()
+            except Exception as e:
+                link_chapter = a_item_.get_attribute("href").strip()
+
+            print(">> ", name_chapter, link_chapter)
+
+
+            # open chapter link to new tab
+            self.driver.execute_script(f"window.open('{link_chapter}', '_blank');")
+
+            # save url of chapter to `Chapter` instance
+            # print("> ", self.driver.current_url)
+            # print("> ", self.driver.window_handles)
+
+            self.wait_to_load_content_change_tab(
+                element=webclass.container_images_div_css,
+                time=10
+            )
+
+            # tab chapter
+            url_chapter = self.driver.current_url
+
+            print("> ", url_chapter)
+
+
+            # regex_number_ = re.findall(r'\d+\.\d+', name_chapter)
+            regex_number_ = re.findall(
+                                r'(?:ch(?:\.|ap|apter)?|cap(?:[íi]tulo)?|ep(?:\.|isode)?)\s*[:\-]?\s*(\d+(?:[.,]\d+)?)',
+                                name_chapter,
+                                re.IGNORECASE
+                            )
+
+            if regex_number_ != []:
+                chapter_number = float(normalize_number(regex_number_[0]))
+            else:
+                chapter_number = n_chapters
+
+            # if regex does not match, use position in chapter list
+            if len(regex_number_) == 1:
+                chapter_number = float(regex_number_[0])
+            else:
+                chapter_number = float(n_chapters)
+
+            self.status.chapter_id = chapter_number
+
+            chapterObj = Chapter(
+                            id=chapter_number,
+                            name=f"{chapter_number}",
+                            link=url_chapter
+                        )
+
+            input("get chapters")
+
+            print("__________", chapterObj)
+
+
+            self.get_images_chapter(
+                                    chapter=chapterObj,
+                                    webclass=webclass,
+                                )
+
+            chapters_comic_list.append(chapterObj)
+
+
+            # close current tab
+            self.driver.close()
+
+            # return to main tab
+            self.driver.switch_to.window(main_tab_)
+
+            n_chapters -= 1
+
+        # natural sort
+        chapters_comic_list.sort()
+        comicObj.chapters = chapters_comic_list
+
+
+    @register_error("get_images")
+    def get_images_chapter(
+        self,
+        chapter: Chapter,
+        webclass: object,
+        # comic: Comic = None,
+    ) -> None:
+        """
+        """
+        print("> get_images_chapter ", len(chapter.images), chapter.link)
+
+        images_div_ = self.wait_for_element(
+                                type="css_selector",
+                                html_element=webclass.container_images_div_css
+                            )
+
+        print("> container images", images_div_)
+
+        chapter_images = []
+        id_ = 1
+
+        self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+        self.driver.execute_script("window.lazySizes && lazySizes.loader.checkElems();")
+
+        sleep(1)
+
+
+        list_images_ = self.element_find_elements(
+                        element=images_div_,
+                        selectors=["img"]
+                    )
+
+
+        print("> images", len(list_images_))
+
+
+
+        # for img in images_div_.find_elements(By.TAG_NAME, 'img'):
+        for img in list_images_:
+
+            url_image = img.get_attribute('data-src')
+
+            if url_image is None:
+                url_image = img.get_attribute('src')
+
+            name_, ext_ = PathClass.splitext(url_image)
+            # print("> ", url_image)
+
+            self.status.imagechapter_id = id_
+
+            image = ImageChapter(
+                                id=id_,
+                                name=name_,
+                                extention=ext_,
+                                link=url_image
+                            )
+            # print(image)
+            chapter_images.append(image)
+
+            id_ += 1
+
+        chapter.images = chapter_images

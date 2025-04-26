@@ -1,0 +1,16 @@
+{
+    "method": "Selenium.get_images_chapter",
+    "error": true,
+    "show": false,
+    "setup": true,
+    "comic": {
+        "name": "LINK CLICK",
+        "link": "https://zonatmo.com/library/manhua/79357/linkclick",
+        "chapters": [],
+        "path": null,
+        "volumes": null
+    },
+    "comic_name": "LINK CLICK",
+    "chapter_id": 4.0,
+    "imagechapter_id": 8
+}
