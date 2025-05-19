@@ -3,15 +3,12 @@
 Handler related to files ZIP.
 """
 
+from src.models import Chapter
+
 import zipfile
 
-import os
 
 from typing import List
-
-from src.models import (
-        Chapter
-    )
 
 
 class ZipHandler:

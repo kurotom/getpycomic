@@ -8,8 +8,11 @@ def normalize_number(
 ) -> str:
     """
     """
-    x, y = number.split(".")
-    y = y.strip('0')
-    if y == "":
-        y = "0"
-    return f"{int(x)}.{y}"
+    try:
+        x, y = number.split(".")
+        y = y.strip('0')
+        if y == "":
+            y = "0"
+        return f"{int(x)}.{int(y)}"
+    except ValueError as e:
+        return f"{float(number)}"

@@ -71,6 +71,15 @@ class PathClass:
             print(e)
             return False
 
+    def listdir(
+        path: str = ""
+    ) -> None:
+        """
+        """
+        if path != "":
+            return os.listdir(path)
+        return os.listdir()
+
     def dirname(
         path: str
     ) -> str:

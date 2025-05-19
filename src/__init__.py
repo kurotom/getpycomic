@@ -18,10 +18,9 @@ from src.engines import (
 
 from src.imagehandler import ImagesHandler
 from src.ziphandler import ZipHandler
-from src.chapter_by_volume import ChapterClassifierByVolume
+from src.chapter_by_volume import VolumesSorter
 from src.requests_data import RequestsData
 from src.pathclass import PathClass
-from src.data_pickle import PickleData
 from src.errorhandlerdecorator import register_error
 from src.status import Status
 

@@ -25,12 +25,14 @@ class TmoManga(metaclass=BaseMeta):
 #
 
 
-# comic page section
+# comic and list of chapters
     # title_comic = ".post-title > h1:nth-child(2)"  # css selector
     chapters_content_ul_class = [
         ".sub-chap",  # class selector
 
     ]
+
+    button_show_all_chapters = None
 
     chapter_css = [
         "li.wp-manga-chapter:nth-child(n)",  # class selector

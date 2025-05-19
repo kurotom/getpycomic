@@ -1,16 +1,931 @@
 {
-    "method": "Selenium.get_images_chapter",
-    "error": true,
+    "method": null,
+    "error": false,
     "show": false,
     "setup": true,
     "comic": {
         "name": "LINK CLICK",
         "link": "https://zonatmo.com/library/manhua/79357/linkclick",
-        "chapters": [],
-        "path": null,
+        "chapters": [
+            {
+                "id": 0.0,
+                "name": "0.0",
+                "link": "https://zonatmo.com/viewer/80d6346fb714dc2bb5e1addc9e339908/cascade",
+                "images": [
+                    {
+                        "id": 1,
+                        "name": "3f94fcdd",
+                        "extention": ".jpg",
+                        "link": "https://imgtmo.com/uploads/20230902/80d6346fb714dc2bb5e1addc9e339908/3f94fcdd.webp",
+                        "path": "/home/ocio/GetPyComic/LINK CLICK-zonatmo-com/0.0/001.jpg"
+                    },
+                    {
+                        "id": 2,
+                        "name": "5f27b962",
+                        "extention": ".jpg",
+                        "link": "https://imgtmo.com/uploads/20230902/80d6346fb714dc2bb5e1addc9e339908/5f27b962.webp",
+                        "path": "/home/ocio/GetPyComic/LINK CLICK-zonatmo-com/0.0/002.jpg"
+                    },
+                    {
+                        "id": 3,
+                        "name": "8c35496c",
+                        "extention": ".jpg",
+                        "link": "https://imgtmo.com/uploads/20230902/80d6346fb714dc2bb5e1addc9e339908/8c35496c.webp",
+                        "path": "/home/ocio/GetPyComic/LINK CLICK-zonatmo-com/0.0/003.jpg"
+                    },
+                    {
+                        "id": 4,
+                        "name": "77ccb334",
+                        "extention": ".jpg",
+                        "link": "https://imgtmo.com/uploads/20230902/80d6346fb714dc2bb5e1addc9e339908/77ccb334.webp",
+                        "path": "/home/ocio/GetPyComic/LINK CLICK-zonatmo-com/0.0/004.jpg"
+                    },
+                    {
+                        "id": 5,
+                        "name": "fbcbf812",
+                        "extention": ".jpg",
+                        "link": "https://imgtmo.com/uploads/20230902/80d6346fb714dc2bb5e1addc9e339908/fbcbf812.webp",
+                        "path": "/home/ocio/GetPyComic/LINK CLICK-zonatmo-com/0.0/005.jpg"
+                    },
+                    {
+                        "id": 6,
+                        "name": "131c750f",
+                        "extention": ".jpg",
+                        "link": "https://imgtmo.com/uploads/20230902/80d6346fb714dc2bb5e1addc9e339908/131c750f.webp",
+                        "path": "/home/ocio/GetPyComic/LINK CLICK-zonatmo-com/0.0/006.jpg"
+                    }
+                ],
+                "path": "/home/ocio/GetPyComic/LINK CLICK-zonatmo-com/0.0"
+            },
+            {
+                "id": 1.0,
+                "name": "1.0",
+                "link": "https://zonatmo.com/viewer/b594b052d96cb507581223b4803dcbff/cascade",
+                "images": [
+                    {
+                        "id": 1,
+                        "name": "71fed852",
+                        "extention": ".jpg",
+                        "link": "https://imgtmo.com/uploads/20231003/b594b052d96cb507581223b4803dcbff/71fed852.webp",
+                        "path": "/home/ocio/GetPyComic/LINK CLICK-zonatmo-com/1.0/001.jpg"
+                    },
+                    {
+                        "id": 2,
+                        "name": "4fcb1316",
+                        "extention": ".jpg",
+                        "link": "https://imgtmo.com/uploads/20231003/b594b052d96cb507581223b4803dcbff/4fcb1316.webp",
+                        "path": "/home/ocio/GetPyComic/LINK CLICK-zonatmo-com/1.0/002.jpg"
+                    },
+                    {
+                        "id": 3,
+                        "name": "202e8c10",
+                        "extention": ".jpg",
+                        "link": "https://imgtmo.com/uploads/20231003/b594b052d96cb507581223b4803dcbff/202e8c10.webp",
+                        "path": "/home/ocio/GetPyComic/LINK CLICK-zonatmo-com/1.0/003.jpg"
+                    },
+                    {
+                        "id": 4,
+                        "name": "e6fe08e7",
+                        "extention": ".jpg",
+                        "link": "https://imgtmo.com/uploads/20231003/b594b052d96cb507581223b4803dcbff/e6fe08e7.webp",
+                        "path": "/home/ocio/GetPyComic/LINK CLICK-zonatmo-com/1.0/004.jpg"
+                    },
+                    {
+                        "id": 5,
+                        "name": "a38c43b6",
+                        "extention": ".jpg",
+                        "link": "https://imgtmo.com/uploads/20231003/b594b052d96cb507581223b4803dcbff/a38c43b6.webp",
+                        "path": "/home/ocio/GetPyComic/LINK CLICK-zonatmo-com/1.0/005.jpg"
+                    },
+                    {
+                        "id": 6,
+                        "name": "409887c1",
+                        "extention": ".jpg",
+                        "link": "https://imgtmo.com/uploads/20231003/b594b052d96cb507581223b4803dcbff/409887c1.webp",
+                        "path": "/home/ocio/GetPyComic/LINK CLICK-zonatmo-com/1.0/006.jpg"
+                    },
+                    {
+                        "id": 7,
+                        "name": "bd1a4bc5",
+                        "extention": ".jpg",
+                        "link": "https://imgtmo.com/uploads/20231003/b594b052d96cb507581223b4803dcbff/bd1a4bc5.webp",
+                        "path": "/home/ocio/GetPyComic/LINK CLICK-zonatmo-com/1.0/007.jpg"
+                    },
+                    {
+                        "id": 8,
+                        "name": "617ebb1a",
+                        "extention": ".jpg",
+                        "link": "https://imgtmo.com/uploads/20231003/b594b052d96cb507581223b4803dcbff/617ebb1a.webp",
+                        "path": "/home/ocio/GetPyComic/LINK CLICK-zonatmo-com/1.0/008.jpg"
+                    },
+                    {
+                        "id": 9,
+                        "name": "ef293814",
+                        "extention": ".jpg",
+                        "link": "https://imgtmo.com/uploads/20231003/b594b052d96cb507581223b4803dcbff/ef293814.webp",
+                        "path": "/home/ocio/GetPyComic/LINK CLICK-zonatmo-com/1.0/009.jpg"
+                    },
+                    {
+                        "id": 10,
+                        "name": "86f3da53",
+                        "extention": ".jpg",
+                        "link": "https://imgtmo.com/uploads/20231003/b594b052d96cb507581223b4803dcbff/86f3da53.webp",
+                        "path": "/home/ocio/GetPyComic/LINK CLICK-zonatmo-com/1.0/010.jpg"
+                    },
+                    {
+                        "id": 11,
+                        "name": "ba6b7eba",
+                        "extention": ".jpg",
+                        "link": "https://imgtmo.com/uploads/20231003/b594b052d96cb507581223b4803dcbff/ba6b7eba.webp",
+                        "path": "/home/ocio/GetPyComic/LINK CLICK-zonatmo-com/1.0/011.jpg"
+                    },
+                    {
+                        "id": 12,
+                        "name": "f6ce4e96",
+                        "extention": ".jpg",
+                        "link": "https://imgtmo.com/uploads/20231003/b594b052d96cb507581223b4803dcbff/f6ce4e96.webp",
+                        "path": "/home/ocio/GetPyComic/LINK CLICK-zonatmo-com/1.0/012.jpg"
+                    },
+                    {
+                        "id": 13,
+                        "name": "faa67985",
+                        "extention": ".jpg",
+                        "link": "https://imgtmo.com/uploads/20231003/b594b052d96cb507581223b4803dcbff/faa67985.webp",
+                        "path": "/home/ocio/GetPyComic/LINK CLICK-zonatmo-com/1.0/013.jpg"
+                    },
+                    {
+                        "id": 14,
+                        "name": "d6289111",
+                        "extention": ".jpg",
+                        "link": "https://imgtmo.com/uploads/20231003/b594b052d96cb507581223b4803dcbff/d6289111.webp",
+                        "path": "/home/ocio/GetPyComic/LINK CLICK-zonatmo-com/1.0/014.jpg"
+                    },
+                    {
+                        "id": 15,
+                        "name": "35d21bc3",
+                        "extention": ".jpg",
+                        "link": "https://imgtmo.com/uploads/20231003/b594b052d96cb507581223b4803dcbff/35d21bc3.webp",
+                        "path": "/home/ocio/GetPyComic/LINK CLICK-zonatmo-com/1.0/015.jpg"
+                    },
+                    {
+                        "id": 16,
+                        "name": "afc923fd",
+                        "extention": ".jpg",
+                        "link": "https://imgtmo.com/uploads/20231003/b594b052d96cb507581223b4803dcbff/afc923fd.webp",
+                        "path": "/home/ocio/GetPyComic/LINK CLICK-zonatmo-com/1.0/016.jpg"
+                    }
+                ],
+                "path": "/home/ocio/GetPyComic/LINK CLICK-zonatmo-com/1.0"
+            },
+            {
+                "id": 2.0,
+                "name": "2.0",
+                "link": "https://zonatmo.com/viewer/ceaabde8abb4d7ffcc91e8c915c47678/cascade",
+                "images": [
+                    {
+                        "id": 1,
+                        "name": "f300ed0e",
+                        "extention": ".jpg",
+                        "link": "https://imgtmo.com/uploads/20241226/ceaabde8abb4d7ffcc91e8c915c47678/f300ed0e.webp",
+                        "path": "/home/ocio/GetPyComic/LINK CLICK-zonatmo-com/2.0/001.jpg"
+                    },
+                    {
+                        "id": 2,
+                        "name": "591da9d9",
+                        "extention": ".jpg",
+                        "link": "https://imgtmo.com/uploads/20241226/ceaabde8abb4d7ffcc91e8c915c47678/591da9d9.webp",
+                        "path": "/home/ocio/GetPyComic/LINK CLICK-zonatmo-com/2.0/002.jpg"
+                    },
+                    {
+                        "id": 3,
+                        "name": "c146c2d0",
+                        "extention": ".jpg",
+                        "link": "https://imgtmo.com/uploads/20241226/ceaabde8abb4d7ffcc91e8c915c47678/c146c2d0.webp",
+                        "path": "/home/ocio/GetPyComic/LINK CLICK-zonatmo-com/2.0/003.jpg"
+                    },
+                    {
+                        "id": 4,
+                        "name": "d28b6b98",
+                        "extention": ".jpg",
+                        "link": "https://imgtmo.com/uploads/20241226/ceaabde8abb4d7ffcc91e8c915c47678/d28b6b98.webp",
+                        "path": "/home/ocio/GetPyComic/LINK CLICK-zonatmo-com/2.0/004.jpg"
+                    },
+                    {
+                        "id": 5,
+                        "name": "1f405042",
+                        "extention": ".jpg",
+                        "link": "https://imgtmo.com/uploads/20241226/ceaabde8abb4d7ffcc91e8c915c47678/1f405042.webp",
+                        "path": "/home/ocio/GetPyComic/LINK CLICK-zonatmo-com/2.0/005.jpg"
+                    },
+                    {
+                        "id": 6,
+                        "name": "30d2cead",
+                        "extention": ".jpg",
+                        "link": "https://imgtmo.com/uploads/20241226/ceaabde8abb4d7ffcc91e8c915c47678/30d2cead.webp",
+                        "path": "/home/ocio/GetPyComic/LINK CLICK-zonatmo-com/2.0/006.jpg"
+                    },
+                    {
+                        "id": 7,
+                        "name": "d0f20833",
+                        "extention": ".jpg",
+                        "link": "https://imgtmo.com/uploads/20241226/ceaabde8abb4d7ffcc91e8c915c47678/d0f20833.webp",
+                        "path": "/home/ocio/GetPyComic/LINK CLICK-zonatmo-com/2.0/007.jpg"
+                    },
+                    {
+                        "id": 8,
+                        "name": "112335b4",
+                        "extention": ".jpg",
+                        "link": "https://imgtmo.com/uploads/20241226/ceaabde8abb4d7ffcc91e8c915c47678/112335b4.webp",
+                        "path": "/home/ocio/GetPyComic/LINK CLICK-zonatmo-com/2.0/008.jpg"
+                    },
+                    {
+                        "id": 9,
+                        "name": "b8da5255",
+                        "extention": ".jpg",
+                        "link": "https://imgtmo.com/uploads/20241226/ceaabde8abb4d7ffcc91e8c915c47678/b8da5255.webp",
+                        "path": "/home/ocio/GetPyComic/LINK CLICK-zonatmo-com/2.0/009.jpg"
+                    },
+                    {
+                        "id": 10,
+                        "name": "28f8349b",
+                        "extention": ".jpg",
+                        "link": "https://imgtmo.com/uploads/20241226/ceaabde8abb4d7ffcc91e8c915c47678/28f8349b.webp",
+                        "path": "/home/ocio/GetPyComic/LINK CLICK-zonatmo-com/2.0/010.jpg"
+                    },
+                    {
+                        "id": 11,
+                        "name": "72a348f7",
+                        "extention": ".jpg",
+                        "link": "https://imgtmo.com/uploads/20241226/ceaabde8abb4d7ffcc91e8c915c47678/72a348f7.webp",
+                        "path": "/home/ocio/GetPyComic/LINK CLICK-zonatmo-com/2.0/011.jpg"
+                    },
+                    {
+                        "id": 12,
+                        "name": "8a291963",
+                        "extention": ".jpg",
+                        "link": "https://imgtmo.com/uploads/20241226/ceaabde8abb4d7ffcc91e8c915c47678/8a291963.webp",
+                        "path": "/home/ocio/GetPyComic/LINK CLICK-zonatmo-com/2.0/012.jpg"
+                    },
+                    {
+                        "id": 13,
+                        "name": "01a9e3eb",
+                        "extention": ".jpg",
+                        "link": "https://imgtmo.com/uploads/20241226/ceaabde8abb4d7ffcc91e8c915c47678/01a9e3eb.webp",
+                        "path": "/home/ocio/GetPyComic/LINK CLICK-zonatmo-com/2.0/013.jpg"
+                    },
+                    {
+                        "id": 14,
+                        "name": "63ebd6ab",
+                        "extention": ".jpg",
+                        "link": "https://imgtmo.com/uploads/20241226/ceaabde8abb4d7ffcc91e8c915c47678/63ebd6ab.webp",
+                        "path": "/home/ocio/GetPyComic/LINK CLICK-zonatmo-com/2.0/014.jpg"
+                    },
+                    {
+                        "id": 15,
+                        "name": "45accb9c",
+                        "extention": ".jpg",
+                        "link": "https://imgtmo.com/uploads/20241226/ceaabde8abb4d7ffcc91e8c915c47678/45accb9c.webp",
+                        "path": "/home/ocio/GetPyComic/LINK CLICK-zonatmo-com/2.0/015.jpg"
+                    },
+                    {
+                        "id": 16,
+                        "name": "faaab4ee",
+                        "extention": ".jpg",
+                        "link": "https://imgtmo.com/uploads/20241226/ceaabde8abb4d7ffcc91e8c915c47678/faaab4ee.webp",
+                        "path": "/home/ocio/GetPyComic/LINK CLICK-zonatmo-com/2.0/016.jpg"
+                    },
+                    {
+                        "id": 17,
+                        "name": "d7a623d3",
+                        "extention": ".jpg",
+                        "link": "https://imgtmo.com/uploads/20241226/ceaabde8abb4d7ffcc91e8c915c47678/d7a623d3.webp",
+                        "path": "/home/ocio/GetPyComic/LINK CLICK-zonatmo-com/2.0/017.jpg"
+                    },
+                    {
+                        "id": 18,
+                        "name": "4515855a",
+                        "extention": ".jpg",
+                        "link": "https://imgtmo.com/uploads/20241226/ceaabde8abb4d7ffcc91e8c915c47678/4515855a.webp",
+                        "path": "/home/ocio/GetPyComic/LINK CLICK-zonatmo-com/2.0/018.jpg"
+                    },
+                    {
+                        "id": 19,
+                        "name": "6b9fbbf4",
+                        "extention": ".jpg",
+                        "link": "https://imgtmo.com/uploads/20241226/ceaabde8abb4d7ffcc91e8c915c47678/6b9fbbf4.webp",
+                        "path": "/home/ocio/GetPyComic/LINK CLICK-zonatmo-com/2.0/019.jpg"
+                    },
+                    {
+                        "id": 20,
+                        "name": "99078602",
+                        "extention": ".jpg",
+                        "link": "https://imgtmo.com/uploads/20241226/ceaabde8abb4d7ffcc91e8c915c47678/99078602.webp",
+                        "path": "/home/ocio/GetPyComic/LINK CLICK-zonatmo-com/2.0/020.jpg"
+                    },
+                    {
+                        "id": 21,
+                        "name": "9af27039",
+                        "extention": ".jpg",
+                        "link": "https://imgtmo.com/uploads/20241226/ceaabde8abb4d7ffcc91e8c915c47678/9af27039.webp",
+                        "path": "/home/ocio/GetPyComic/LINK CLICK-zonatmo-com/2.0/021.jpg"
+                    },
+                    {
+                        "id": 22,
+                        "name": "2309f138",
+                        "extention": ".jpg",
+                        "link": "https://imgtmo.com/uploads/20241226/ceaabde8abb4d7ffcc91e8c915c47678/2309f138.webp",
+                        "path": "/home/ocio/GetPyComic/LINK CLICK-zonatmo-com/2.0/022.jpg"
+                    },
+                    {
+                        "id": 23,
+                        "name": "f2326de2",
+                        "extention": ".jpg",
+                        "link": "https://imgtmo.com/uploads/20241226/ceaabde8abb4d7ffcc91e8c915c47678/f2326de2.webp",
+                        "path": "/home/ocio/GetPyComic/LINK CLICK-zonatmo-com/2.0/023.jpg"
+                    },
+                    {
+                        "id": 24,
+                        "name": "15ce3feb",
+                        "extention": ".jpg",
+                        "link": "https://imgtmo.com/uploads/20241226/ceaabde8abb4d7ffcc91e8c915c47678/15ce3feb.webp",
+                        "path": "/home/ocio/GetPyComic/LINK CLICK-zonatmo-com/2.0/024.jpg"
+                    },
+                    {
+                        "id": 25,
+                        "name": "6dc1d8d1",
+                        "extention": ".jpg",
+                        "link": "https://imgtmo.com/uploads/20241226/ceaabde8abb4d7ffcc91e8c915c47678/6dc1d8d1.webp",
+                        "path": "/home/ocio/GetPyComic/LINK CLICK-zonatmo-com/2.0/025.jpg"
+                    },
+                    {
+                        "id": 26,
+                        "name": "17ef78c6",
+                        "extention": ".jpg",
+                        "link": "https://imgtmo.com/uploads/20241226/ceaabde8abb4d7ffcc91e8c915c47678/17ef78c6.webp",
+                        "path": "/home/ocio/GetPyComic/LINK CLICK-zonatmo-com/2.0/026.jpg"
+                    }
+                ],
+                "path": "/home/ocio/GetPyComic/LINK CLICK-zonatmo-com/2.0"
+            },
+            {
+                "id": 3.0,
+                "name": "3.0",
+                "link": "https://zonatmo.com/viewer/e231746827f844301a38f9ef2a74b713/cascade",
+                "images": [
+                    {
+                        "id": 1,
+                        "name": "c3d40954",
+                        "extention": ".jpg",
+                        "link": "https://imgtmo.com/uploads/20250119/e231746827f844301a38f9ef2a74b713/c3d40954.webp",
+                        "path": "/home/ocio/GetPyComic/LINK CLICK-zonatmo-com/3.0/001.jpg"
+                    },
+                    {
+                        "id": 2,
+                        "name": "b49499d9",
+                        "extention": ".jpg",
+                        "link": "https://imgtmo.com/uploads/20250119/e231746827f844301a38f9ef2a74b713/b49499d9.webp",
+                        "path": "/home/ocio/GetPyComic/LINK CLICK-zonatmo-com/3.0/002.jpg"
+                    },
+                    {
+                        "id": 3,
+                        "name": "65c39494",
+                        "extention": ".jpg",
+                        "link": "https://imgtmo.com/uploads/20250119/e231746827f844301a38f9ef2a74b713/65c39494.webp",
+                        "path": "/home/ocio/GetPyComic/LINK CLICK-zonatmo-com/3.0/003.jpg"
+                    },
+                    {
+                        "id": 4,
+                        "name": "4fa13023",
+                        "extention": ".jpg",
+                        "link": "https://imgtmo.com/uploads/20250119/e231746827f844301a38f9ef2a74b713/4fa13023.webp",
+                        "path": "/home/ocio/GetPyComic/LINK CLICK-zonatmo-com/3.0/004.jpg"
+                    },
+                    {
+                        "id": 5,
+                        "name": "96a88971",
+                        "extention": ".jpg",
+                        "link": "https://imgtmo.com/uploads/20250119/e231746827f844301a38f9ef2a74b713/96a88971.webp",
+                        "path": "/home/ocio/GetPyComic/LINK CLICK-zonatmo-com/3.0/005.jpg"
+                    },
+                    {
+                        "id": 6,
+                        "name": "586c5fed",
+                        "extention": ".jpg",
+                        "link": "https://imgtmo.com/uploads/20250119/e231746827f844301a38f9ef2a74b713/586c5fed.webp",
+                        "path": "/home/ocio/GetPyComic/LINK CLICK-zonatmo-com/3.0/006.jpg"
+                    },
+                    {
+                        "id": 7,
+                        "name": "03c398af",
+                        "extention": ".jpg",
+                        "link": "https://imgtmo.com/uploads/20250119/e231746827f844301a38f9ef2a74b713/03c398af.webp",
+                        "path": "/home/ocio/GetPyComic/LINK CLICK-zonatmo-com/3.0/007.jpg"
+                    }
+                ],
+                "path": "/home/ocio/GetPyComic/LINK CLICK-zonatmo-com/3.0"
+            },
+            {
+                "id": 4.0,
+                "name": "4.0",
+                "link": "https://zonatmo.com/viewer/dae5cc54542f6075b15e2ab2e60d74df/cascade",
+                "images": [
+                    {
+                        "id": 1,
+                        "name": "102d02d0",
+                        "extention": ".jpg",
+                        "link": "https://imgtmo.com/uploads/20250119/dae5cc54542f6075b15e2ab2e60d74df/102d02d0.webp",
+                        "path": "/home/ocio/GetPyComic/LINK CLICK-zonatmo-com/4.0/001.jpg"
+                    },
+                    {
+                        "id": 2,
+                        "name": "5c77c347",
+                        "extention": ".jpg",
+                        "link": "https://imgtmo.com/uploads/20250119/dae5cc54542f6075b15e2ab2e60d74df/5c77c347.webp",
+                        "path": "/home/ocio/GetPyComic/LINK CLICK-zonatmo-com/4.0/002.jpg"
+                    },
+                    {
+                        "id": 3,
+                        "name": "78c5674a",
+                        "extention": ".jpg",
+                        "link": "https://imgtmo.com/uploads/20250119/dae5cc54542f6075b15e2ab2e60d74df/78c5674a.webp",
+                        "path": "/home/ocio/GetPyComic/LINK CLICK-zonatmo-com/4.0/003.jpg"
+                    },
+                    {
+                        "id": 4,
+                        "name": "ff2eb833",
+                        "extention": ".jpg",
+                        "link": "https://imgtmo.com/uploads/20250119/dae5cc54542f6075b15e2ab2e60d74df/ff2eb833.webp",
+                        "path": "/home/ocio/GetPyComic/LINK CLICK-zonatmo-com/4.0/004.jpg"
+                    },
+                    {
+                        "id": 5,
+                        "name": "62c19db5",
+                        "extention": ".jpg",
+                        "link": "https://imgtmo.com/uploads/20250119/dae5cc54542f6075b15e2ab2e60d74df/62c19db5.webp",
+                        "path": "/home/ocio/GetPyComic/LINK CLICK-zonatmo-com/4.0/005.jpg"
+                    },
+                    {
+                        "id": 6,
+                        "name": "22d7c628",
+                        "extention": ".jpg",
+                        "link": "https://imgtmo.com/uploads/20250119/dae5cc54542f6075b15e2ab2e60d74df/22d7c628.webp",
+                        "path": "/home/ocio/GetPyComic/LINK CLICK-zonatmo-com/4.0/006.jpg"
+                    },
+                    {
+                        "id": 7,
+                        "name": "9f9b82b0",
+                        "extention": ".jpg",
+                        "link": "https://imgtmo.com/uploads/20250119/dae5cc54542f6075b15e2ab2e60d74df/9f9b82b0.webp",
+                        "path": "/home/ocio/GetPyComic/LINK CLICK-zonatmo-com/4.0/007.jpg"
+                    }
+                ],
+                "path": "/home/ocio/GetPyComic/LINK CLICK-zonatmo-com/4.0"
+            },
+            {
+                "id": 5.0,
+                "name": "5.0",
+                "link": "https://zonatmo.com/viewer/d0806a9fcadacf8763d11f31f4aa2e11/cascade",
+                "images": [
+                    {
+                        "id": 1,
+                        "name": "81272dc1",
+                        "extention": ".jpg",
+                        "link": "https://imgtmo.com/uploads/20250119/d0806a9fcadacf8763d11f31f4aa2e11/81272dc1.webp",
+                        "path": "/home/ocio/GetPyComic/LINK CLICK-zonatmo-com/5.0/001.jpg"
+                    },
+                    {
+                        "id": 2,
+                        "name": "cf6ec116",
+                        "extention": ".jpg",
+                        "link": "https://imgtmo.com/uploads/20250119/d0806a9fcadacf8763d11f31f4aa2e11/cf6ec116.webp",
+                        "path": "/home/ocio/GetPyComic/LINK CLICK-zonatmo-com/5.0/002.jpg"
+                    },
+                    {
+                        "id": 3,
+                        "name": "7e6b7cfb",
+                        "extention": ".jpg",
+                        "link": "https://imgtmo.com/uploads/20250119/d0806a9fcadacf8763d11f31f4aa2e11/7e6b7cfb.webp",
+                        "path": "/home/ocio/GetPyComic/LINK CLICK-zonatmo-com/5.0/003.jpg"
+                    },
+                    {
+                        "id": 4,
+                        "name": "eef182d1",
+                        "extention": ".jpg",
+                        "link": "https://imgtmo.com/uploads/20250119/d0806a9fcadacf8763d11f31f4aa2e11/eef182d1.webp",
+                        "path": "/home/ocio/GetPyComic/LINK CLICK-zonatmo-com/5.0/004.jpg"
+                    },
+                    {
+                        "id": 5,
+                        "name": "70af4f22",
+                        "extention": ".jpg",
+                        "link": "https://imgtmo.com/uploads/20250119/d0806a9fcadacf8763d11f31f4aa2e11/70af4f22.webp",
+                        "path": "/home/ocio/GetPyComic/LINK CLICK-zonatmo-com/5.0/005.jpg"
+                    },
+                    {
+                        "id": 6,
+                        "name": "72c1430a",
+                        "extention": ".jpg",
+                        "link": "https://imgtmo.com/uploads/20250119/d0806a9fcadacf8763d11f31f4aa2e11/72c1430a.webp",
+                        "path": "/home/ocio/GetPyComic/LINK CLICK-zonatmo-com/5.0/006.jpg"
+                    },
+                    {
+                        "id": 7,
+                        "name": "cdf91e60",
+                        "extention": ".jpg",
+                        "link": "https://imgtmo.com/uploads/20250119/d0806a9fcadacf8763d11f31f4aa2e11/cdf91e60.webp",
+                        "path": "/home/ocio/GetPyComic/LINK CLICK-zonatmo-com/5.0/007.jpg"
+                    },
+                    {
+                        "id": 8,
+                        "name": "184a22aa",
+                        "extention": ".jpg",
+                        "link": "https://imgtmo.com/uploads/20250119/d0806a9fcadacf8763d11f31f4aa2e11/184a22aa.webp",
+                        "path": "/home/ocio/GetPyComic/LINK CLICK-zonatmo-com/5.0/008.jpg"
+                    },
+                    {
+                        "id": 9,
+                        "name": "81e2a9cb",
+                        "extention": ".jpg",
+                        "link": "https://imgtmo.com/uploads/20250119/d0806a9fcadacf8763d11f31f4aa2e11/81e2a9cb.webp",
+                        "path": "/home/ocio/GetPyComic/LINK CLICK-zonatmo-com/5.0/009.jpg"
+                    },
+                    {
+                        "id": 10,
+                        "name": "43bac6d8",
+                        "extention": ".jpg",
+                        "link": "https://imgtmo.com/uploads/20250119/d0806a9fcadacf8763d11f31f4aa2e11/43bac6d8.webp",
+                        "path": "/home/ocio/GetPyComic/LINK CLICK-zonatmo-com/5.0/010.jpg"
+                    }
+                ],
+                "path": "/home/ocio/GetPyComic/LINK CLICK-zonatmo-com/5.0"
+            },
+            {
+                "id": 6.0,
+                "name": "6.0",
+                "link": "https://zonatmo.com/viewer/aa6e836c68540cbf45da9464c01a3540/cascade",
+                "images": [
+                    {
+                        "id": 1,
+                        "name": "4d6bab32",
+                        "extention": ".jpg",
+                        "link": "https://imgtmo.com/uploads/20250119/aa6e836c68540cbf45da9464c01a3540/4d6bab32.webp",
+                        "path": "/home/ocio/GetPyComic/LINK CLICK-zonatmo-com/6.0/001.jpg"
+                    },
+                    {
+                        "id": 2,
+                        "name": "53e0aa30",
+                        "extention": ".jpg",
+                        "link": "https://imgtmo.com/uploads/20250119/aa6e836c68540cbf45da9464c01a3540/53e0aa30.webp",
+                        "path": "/home/ocio/GetPyComic/LINK CLICK-zonatmo-com/6.0/002.jpg"
+                    },
+                    {
+                        "id": 3,
+                        "name": "0cf11986",
+                        "extention": ".jpg",
+                        "link": "https://imgtmo.com/uploads/20250119/aa6e836c68540cbf45da9464c01a3540/0cf11986.webp",
+                        "path": "/home/ocio/GetPyComic/LINK CLICK-zonatmo-com/6.0/003.jpg"
+                    },
+                    {
+                        "id": 4,
+                        "name": "9e30dc1d",
+                        "extention": ".jpg",
+                        "link": "https://imgtmo.com/uploads/20250119/aa6e836c68540cbf45da9464c01a3540/9e30dc1d.webp",
+                        "path": "/home/ocio/GetPyComic/LINK CLICK-zonatmo-com/6.0/004.jpg"
+                    },
+                    {
+                        "id": 5,
+                        "name": "1b368017",
+                        "extention": ".jpg",
+                        "link": "https://imgtmo.com/uploads/20250119/aa6e836c68540cbf45da9464c01a3540/1b368017.webp",
+                        "path": "/home/ocio/GetPyComic/LINK CLICK-zonatmo-com/6.0/005.jpg"
+                    },
+                    {
+                        "id": 6,
+                        "name": "5ab6fd3b",
+                        "extention": ".jpg",
+                        "link": "https://imgtmo.com/uploads/20250119/aa6e836c68540cbf45da9464c01a3540/5ab6fd3b.webp",
+                        "path": "/home/ocio/GetPyComic/LINK CLICK-zonatmo-com/6.0/006.jpg"
+                    },
+                    {
+                        "id": 7,
+                        "name": "a2fc3ec9",
+                        "extention": ".jpg",
+                        "link": "https://imgtmo.com/uploads/20250119/aa6e836c68540cbf45da9464c01a3540/a2fc3ec9.webp",
+                        "path": "/home/ocio/GetPyComic/LINK CLICK-zonatmo-com/6.0/007.jpg"
+                    },
+                    {
+                        "id": 8,
+                        "name": "a27629d3",
+                        "extention": ".jpg",
+                        "link": "https://imgtmo.com/uploads/20250119/aa6e836c68540cbf45da9464c01a3540/a27629d3.webp",
+                        "path": "/home/ocio/GetPyComic/LINK CLICK-zonatmo-com/6.0/008.jpg"
+                    }
+                ],
+                "path": "/home/ocio/GetPyComic/LINK CLICK-zonatmo-com/6.0"
+            },
+            {
+                "id": 7.0,
+                "name": "7.0",
+                "link": "https://zonatmo.com/viewer/78e3e7e77f7a287c47c9940360504b7a/cascade",
+                "images": [
+                    {
+                        "id": 1,
+                        "name": "6792cfdf",
+                        "extention": ".jpg",
+                        "link": "https://imgtmo.com/uploads/20250119/78e3e7e77f7a287c47c9940360504b7a/6792cfdf.webp",
+                        "path": "/home/ocio/GetPyComic/LINK CLICK-zonatmo-com/7.0/001.jpg"
+                    },
+                    {
+                        "id": 2,
+                        "name": "a5b91577",
+                        "extention": ".jpg",
+                        "link": "https://imgtmo.com/uploads/20250119/78e3e7e77f7a287c47c9940360504b7a/a5b91577.webp",
+                        "path": "/home/ocio/GetPyComic/LINK CLICK-zonatmo-com/7.0/002.jpg"
+                    },
+                    {
+                        "id": 3,
+                        "name": "f4d50333",
+                        "extention": ".jpg",
+                        "link": "https://imgtmo.com/uploads/20250119/78e3e7e77f7a287c47c9940360504b7a/f4d50333.webp",
+                        "path": "/home/ocio/GetPyComic/LINK CLICK-zonatmo-com/7.0/003.jpg"
+                    },
+                    {
+                        "id": 4,
+                        "name": "439a668e",
+                        "extention": ".jpg",
+                        "link": "https://imgtmo.com/uploads/20250119/78e3e7e77f7a287c47c9940360504b7a/439a668e.webp",
+                        "path": "/home/ocio/GetPyComic/LINK CLICK-zonatmo-com/7.0/004.jpg"
+                    },
+                    {
+                        "id": 5,
+                        "name": "a9037ef3",
+                        "extention": ".jpg",
+                        "link": "https://imgtmo.com/uploads/20250119/78e3e7e77f7a287c47c9940360504b7a/a9037ef3.webp",
+                        "path": "/home/ocio/GetPyComic/LINK CLICK-zonatmo-com/7.0/005.jpg"
+                    },
+                    {
+                        "id": 6,
+                        "name": "9d95d5e3",
+                        "extention": ".jpg",
+                        "link": "https://imgtmo.com/uploads/20250119/78e3e7e77f7a287c47c9940360504b7a/9d95d5e3.webp",
+                        "path": "/home/ocio/GetPyComic/LINK CLICK-zonatmo-com/7.0/006.jpg"
+                    },
+                    {
+                        "id": 7,
+                        "name": "17799f3d",
+                        "extention": ".jpg",
+                        "link": "https://imgtmo.com/uploads/20250119/78e3e7e77f7a287c47c9940360504b7a/17799f3d.webp",
+                        "path": "/home/ocio/GetPyComic/LINK CLICK-zonatmo-com/7.0/007.jpg"
+                    },
+                    {
+                        "id": 8,
+                        "name": "7f65bcce",
+                        "extention": ".jpg",
+                        "link": "https://imgtmo.com/uploads/20250119/78e3e7e77f7a287c47c9940360504b7a/7f65bcce.webp",
+                        "path": "/home/ocio/GetPyComic/LINK CLICK-zonatmo-com/7.0/008.jpg"
+                    },
+                    {
+                        "id": 9,
+                        "name": "681e5cb2",
+                        "extention": ".jpg",
+                        "link": "https://imgtmo.com/uploads/20250119/78e3e7e77f7a287c47c9940360504b7a/681e5cb2.webp",
+                        "path": "/home/ocio/GetPyComic/LINK CLICK-zonatmo-com/7.0/009.jpg"
+                    },
+                    {
+                        "id": 10,
+                        "name": "eecac5b9",
+                        "extention": ".jpg",
+                        "link": "https://imgtmo.com/uploads/20250119/78e3e7e77f7a287c47c9940360504b7a/eecac5b9.webp",
+                        "path": "/home/ocio/GetPyComic/LINK CLICK-zonatmo-com/7.0/010.jpg"
+                    }
+                ],
+                "path": "/home/ocio/GetPyComic/LINK CLICK-zonatmo-com/7.0"
+            },
+            {
+                "id": 8.0,
+                "name": "8.0",
+                "link": "https://zonatmo.com/viewer/d6a4b3a0c4c5cbcd552f752ad822b70e/cascade",
+                "images": [
+                    {
+                        "id": 1,
+                        "name": "9f336b9f",
+                        "extention": ".jpg",
+                        "link": "https://imgtmo.com/uploads/20250119/d6a4b3a0c4c5cbcd552f752ad822b70e/9f336b9f.webp",
+                        "path": "/home/ocio/GetPyComic/LINK CLICK-zonatmo-com/8.0/001.jpg"
+                    },
+                    {
+                        "id": 2,
+                        "name": "c40079cb",
+                        "extention": ".jpg",
+                        "link": "https://imgtmo.com/uploads/20250119/d6a4b3a0c4c5cbcd552f752ad822b70e/c40079cb.webp",
+                        "path": "/home/ocio/GetPyComic/LINK CLICK-zonatmo-com/8.0/002.jpg"
+                    },
+                    {
+                        "id": 3,
+                        "name": "5555c8ff",
+                        "extention": ".jpg",
+                        "link": "https://imgtmo.com/uploads/20250119/d6a4b3a0c4c5cbcd552f752ad822b70e/5555c8ff.webp",
+                        "path": "/home/ocio/GetPyComic/LINK CLICK-zonatmo-com/8.0/003.jpg"
+                    },
+                    {
+                        "id": 4,
+                        "name": "59e62e20",
+                        "extention": ".jpg",
+                        "link": "https://imgtmo.com/uploads/20250119/d6a4b3a0c4c5cbcd552f752ad822b70e/59e62e20.webp",
+                        "path": "/home/ocio/GetPyComic/LINK CLICK-zonatmo-com/8.0/004.jpg"
+                    },
+                    {
+                        "id": 5,
+                        "name": "add61da1",
+                        "extention": ".jpg",
+                        "link": "https://imgtmo.com/uploads/20250119/d6a4b3a0c4c5cbcd552f752ad822b70e/add61da1.webp",
+                        "path": "/home/ocio/GetPyComic/LINK CLICK-zonatmo-com/8.0/005.jpg"
+                    },
+                    {
+                        "id": 6,
+                        "name": "052ac526",
+                        "extention": ".jpg",
+                        "link": "https://imgtmo.com/uploads/20250119/d6a4b3a0c4c5cbcd552f752ad822b70e/052ac526.webp",
+                        "path": "/home/ocio/GetPyComic/LINK CLICK-zonatmo-com/8.0/006.jpg"
+                    },
+                    {
+                        "id": 7,
+                        "name": "d015c501",
+                        "extention": ".jpg",
+                        "link": "https://imgtmo.com/uploads/20250119/d6a4b3a0c4c5cbcd552f752ad822b70e/d015c501.webp",
+                        "path": "/home/ocio/GetPyComic/LINK CLICK-zonatmo-com/8.0/007.jpg"
+                    },
+                    {
+                        "id": 8,
+                        "name": "e541286f",
+                        "extention": ".jpg",
+                        "link": "https://imgtmo.com/uploads/20250119/d6a4b3a0c4c5cbcd552f752ad822b70e/e541286f.webp",
+                        "path": "/home/ocio/GetPyComic/LINK CLICK-zonatmo-com/8.0/008.jpg"
+                    },
+                    {
+                        "id": 9,
+                        "name": "721127e2",
+                        "extention": ".jpg",
+                        "link": "https://imgtmo.com/uploads/20250119/d6a4b3a0c4c5cbcd552f752ad822b70e/721127e2.webp",
+                        "path": "/home/ocio/GetPyComic/LINK CLICK-zonatmo-com/8.0/009.jpg"
+                    }
+                ],
+                "path": "/home/ocio/GetPyComic/LINK CLICK-zonatmo-com/8.0"
+            },
+            {
+                "id": 9.0,
+                "name": "9.0",
+                "link": "https://zonatmo.com/viewer/2c69c21eeb8aa3bdbba91db7d8f035b9/cascade",
+                "images": [
+                    {
+                        "id": 1,
+                        "name": "8a197087",
+                        "extention": ".jpg",
+                        "link": "https://imgtmo.com/uploads/20250119/2c69c21eeb8aa3bdbba91db7d8f035b9/8a197087.webp",
+                        "path": "/home/ocio/GetPyComic/LINK CLICK-zonatmo-com/9.0/001.jpg"
+                    },
+                    {
+                        "id": 2,
+                        "name": "23a19a1c",
+                        "extention": ".jpg",
+                        "link": "https://imgtmo.com/uploads/20250119/2c69c21eeb8aa3bdbba91db7d8f035b9/23a19a1c.webp",
+                        "path": "/home/ocio/GetPyComic/LINK CLICK-zonatmo-com/9.0/002.jpg"
+                    },
+                    {
+                        "id": 3,
+                        "name": "39986dc0",
+                        "extention": ".jpg",
+                        "link": "https://imgtmo.com/uploads/20250119/2c69c21eeb8aa3bdbba91db7d8f035b9/39986dc0.webp",
+                        "path": "/home/ocio/GetPyComic/LINK CLICK-zonatmo-com/9.0/003.jpg"
+                    },
+                    {
+                        "id": 4,
+                        "name": "f827d2c1",
+                        "extention": ".jpg",
+                        "link": "https://imgtmo.com/uploads/20250119/2c69c21eeb8aa3bdbba91db7d8f035b9/f827d2c1.webp",
+                        "path": "/home/ocio/GetPyComic/LINK CLICK-zonatmo-com/9.0/004.jpg"
+                    },
+                    {
+                        "id": 5,
+                        "name": "3c90d9f7",
+                        "extention": ".jpg",
+                        "link": "https://imgtmo.com/uploads/20250119/2c69c21eeb8aa3bdbba91db7d8f035b9/3c90d9f7.webp",
+                        "path": "/home/ocio/GetPyComic/LINK CLICK-zonatmo-com/9.0/005.jpg"
+                    },
+                    {
+                        "id": 6,
+                        "name": "80755939",
+                        "extention": ".jpg",
+                        "link": "https://imgtmo.com/uploads/20250119/2c69c21eeb8aa3bdbba91db7d8f035b9/80755939.webp",
+                        "path": "/home/ocio/GetPyComic/LINK CLICK-zonatmo-com/9.0/006.jpg"
+                    },
+                    {
+                        "id": 7,
+                        "name": "926680fb",
+                        "extention": ".jpg",
+                        "link": "https://imgtmo.com/uploads/20250119/2c69c21eeb8aa3bdbba91db7d8f035b9/926680fb.webp",
+                        "path": "/home/ocio/GetPyComic/LINK CLICK-zonatmo-com/9.0/007.jpg"
+                    },
+                    {
+                        "id": 8,
+                        "name": "d171d291",
+                        "extention": ".jpg",
+                        "link": "https://imgtmo.com/uploads/20250119/2c69c21eeb8aa3bdbba91db7d8f035b9/d171d291.webp",
+                        "path": "/home/ocio/GetPyComic/LINK CLICK-zonatmo-com/9.0/008.jpg"
+                    },
+                    {
+                        "id": 9,
+                        "name": "df8f4987",
+                        "extention": ".jpg",
+                        "link": "https://imgtmo.com/uploads/20250119/2c69c21eeb8aa3bdbba91db7d8f035b9/df8f4987.webp",
+                        "path": "/home/ocio/GetPyComic/LINK CLICK-zonatmo-com/9.0/009.jpg"
+                    },
+                    {
+                        "id": 10,
+                        "name": "540be996",
+                        "extention": ".jpg",
+                        "link": "https://imgtmo.com/uploads/20250119/2c69c21eeb8aa3bdbba91db7d8f035b9/540be996.webp",
+                        "path": "/home/ocio/GetPyComic/LINK CLICK-zonatmo-com/9.0/010.jpg"
+                    },
+                    {
+                        "id": 11,
+                        "name": "c5686af4",
+                        "extention": ".jpg",
+                        "link": "https://imgtmo.com/uploads/20250119/2c69c21eeb8aa3bdbba91db7d8f035b9/c5686af4.webp",
+                        "path": "/home/ocio/GetPyComic/LINK CLICK-zonatmo-com/9.0/011.jpg"
+                    }
+                ],
+                "path": "/home/ocio/GetPyComic/LINK CLICK-zonatmo-com/9.0"
+            },
+            {
+                "id": 10.0,
+                "name": "10.0",
+                "link": "https://zonatmo.com/viewer/c87e65518aefb0502965237bed9d7241/cascade",
+                "images": [
+                    {
+                        "id": 1,
+                        "name": "5d65f9e7",
+                        "extention": ".jpg",
+                        "link": "https://imgtmo.com/uploads/20250119/c87e65518aefb0502965237bed9d7241/5d65f9e7.webp",
+                        "path": "/home/ocio/GetPyComic/LINK CLICK-zonatmo-com/10.0/001.jpg"
+                    },
+                    {
+                        "id": 2,
+                        "name": "3deeeb2b",
+                        "extention": ".jpg",
+                        "link": "https://imgtmo.com/uploads/20250119/c87e65518aefb0502965237bed9d7241/3deeeb2b.webp",
+                        "path": "/home/ocio/GetPyComic/LINK CLICK-zonatmo-com/10.0/002.jpg"
+                    },
+                    {
+                        "id": 3,
+                        "name": "6e8cccf0",
+                        "extention": ".jpg",
+                        "link": "https://imgtmo.com/uploads/20250119/c87e65518aefb0502965237bed9d7241/6e8cccf0.webp",
+                        "path": "/home/ocio/GetPyComic/LINK CLICK-zonatmo-com/10.0/003.jpg"
+                    },
+                    {
+                        "id": 4,
+                        "name": "66d5965d",
+                        "extention": ".jpg",
+                        "link": "https://imgtmo.com/uploads/20250119/c87e65518aefb0502965237bed9d7241/66d5965d.webp",
+                        "path": "/home/ocio/GetPyComic/LINK CLICK-zonatmo-com/10.0/004.jpg"
+                    },
+                    {
+                        "id": 5,
+                        "name": "107eb440",
+                        "extention": ".jpg",
+                        "link": "https://imgtmo.com/uploads/20250119/c87e65518aefb0502965237bed9d7241/107eb440.webp",
+                        "path": "/home/ocio/GetPyComic/LINK CLICK-zonatmo-com/10.0/005.jpg"
+                    },
+                    {
+                        "id": 6,
+                        "name": "2fbae697",
+                        "extention": ".jpg",
+                        "link": "https://imgtmo.com/uploads/20250119/c87e65518aefb0502965237bed9d7241/2fbae697.webp",
+                        "path": "/home/ocio/GetPyComic/LINK CLICK-zonatmo-com/10.0/006.jpg"
+                    },
+                    {
+                        "id": 7,
+                        "name": "1f889e1b",
+                        "extention": ".jpg",
+                        "link": "https://imgtmo.com/uploads/20250119/c87e65518aefb0502965237bed9d7241/1f889e1b.webp",
+                        "path": "/home/ocio/GetPyComic/LINK CLICK-zonatmo-com/10.0/007.jpg"
+                    },
+                    {
+                        "id": 8,
+                        "name": "47a7ec02",
+                        "extention": ".jpg",
+                        "link": "https://imgtmo.com/uploads/20250119/c87e65518aefb0502965237bed9d7241/47a7ec02.webp",
+                        "path": "/home/ocio/GetPyComic/LINK CLICK-zonatmo-com/10.0/008.jpg"
+                    }
+                ],
+                "path": "/home/ocio/GetPyComic/LINK CLICK-zonatmo-com/10.0"
+            }
+        ],
+        "path": "/home/ocio/GetPyComic/LINK CLICK-zonatmo-com",
         "volumes": null
     },
     "comic_name": "LINK CLICK",
-    "chapter_id": 4.0,
-    "imagechapter_id": 8
+    "chapter_id": 0.0,
+    "imagechapter_id": 6
 }

@@ -17,6 +17,7 @@ class RequestsData:
     ) -> Union[io.BytesIO, None]:
         """
         """
+        # disable warning verify False
         requests.packages.urllib3.disable_warnings()
 
         req = requests.get(link, headers=header, verify=False)

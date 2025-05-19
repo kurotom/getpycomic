@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-# -*- codin: utf-8 -*-
 """
 """
 
@@ -15,9 +14,10 @@ from src.models import (
     )
 
 
-class ChapterClassifierByVolume:
+class VolumesSorter:
     """
     """
+    CHAPTERS_BY_VOLUME = 6
 
     def __init__(self):
         """
@@ -39,7 +39,7 @@ class ChapterClassifierByVolume:
         matrix: dict
     ) -> bool:
         """
-        Check sequence of volumes given by user.
+        Checks the sequence of volumes and chapter ranges indicated by the user.
 
         Args
             matrix: dicctionary with volumes and chapters indicators.
@@ -47,14 +47,45 @@ class ChapterClassifierByVolume:
         Returns
             bool: `True` or `False` if sequential or not.
         """
+        # checks if keys is a int.
+        if all([isinstance(i, int) for i in matrix.keys()]) is False:
+            return False
+
+        # checks if `keys` is a sequence
         seq_keys = list(matrix.keys())
-        return seq_keys == [i for i in range(1, len(seq_keys) + 1)]
+        # print(seq_keys)
+        if seq_keys != [i for i in range(1, len(seq_keys) + 1)]:
+            return False
+
+        # checks if `values` is a sequence
+        seq_values = [
+                    int(x) for i in matrix.values()
+                    if i != ""
+                    for x in (i.split("-")
+                         if isinstance(i, str) else i
+                     )
+                ]
+
+        seq_values = []
+        for val in matrix.values():
+            if not val:
+                continue
+            if isinstance(val, str):
+                values = val.split("-")
+            if isinstance(val, (list)):
+                values = val
+            seq_values.extend(int(i) for i in values)
+
+        if sorted(seq_values) != seq_values:
+            return False
+
+        return True
 
     def sorter(
         self,
         comicObj: Comic = None,
         chapters_by_volume: dict = None
-    ) -> Union[dict, None]:
+    ) -> dict:
         """
         Sorts chapters by volume follow the indication given by user.
 
@@ -79,21 +110,26 @@ class ChapterClassifierByVolume:
             None: if dicctionary given not is correct.
         """
         self.clear()
-        # print(chapters_by_volume)
-        # print(chapters_by_volume.values())
 
+        # print(comicObj, chapters_by_volume)
+        if comicObj is None or isinstance(comicObj, Comic) is False:
+            return {}
+
+        # if chapters_by_volume is None, each volume has 6 chapters
         if chapters_by_volume is None or len(chapters_by_volume) == 0:
-
-            self.volumes[1] = Volume(
-                                volume=1,
-                                list_chapters=[i for i in comicObj.chapters]
-                            )
-
-            return self.volumes
+            chapters_by_volume = {}
+            volume_ = 1
+            n_chaps = len(comicObj.chapters)
+            for i in range(0, n_chaps, VolumesSorter.CHAPTERS_BY_VOLUME):
+                chunk = comicObj.chapters[0 + i: VolumesSorter.CHAPTERS_BY_VOLUME + i]
+                chap_ids = [i.id for i in chunk]
+                chapters_by_volume[volume_] = [min(chap_ids), max(chap_ids)]
+                volume_ += 1
 
         check = self.__sequence_check(matrix=chapters_by_volume)
+        # print(">> ", check, chapters_by_volume)
         if check is False:
-            return None
+            return {}
 
         try:
             for k, v in chapters_by_volume.items():
@@ -138,8 +174,9 @@ class ChapterClassifierByVolume:
                     break
 
                 else:
-                    # ERROR: if volume is but only start chapters indicator
-                    #        is given
+                    # ERROR:
+                    #   if the volume is specified but only the chapter start
+                    #   indicator is specified.
                     msg = 'Must deliver numeric *start* and *end* indicator,\
                      in a list or text string (e.g. "1-2", [1-2]) or leave \
                      blank with an empty string or list or not indicate a \
@@ -164,25 +201,23 @@ class ChapterClassifierByVolume:
     ) -> None:
         """
         """
+        # print(volume, chapter, start, end)
         number_chapter = chapter.id
 
         if number_chapter not in self.chapters_in_volume:
 
-            # if start <= number_chapter < end + 1:
             if start <= number_chapter <= end:
                 # print('> ', volume, start, end, number_chapter)
                 if volume not in self.volumes:
-                    # self.volumes[volume] = [chapter]
                     self.volumes[volume] = Volume(
-                                                    volume=volume,
-                                                    list_chapters=[chapter]
-                                                )
-
+                                                volume=volume,
+                                                list_chapters=[]
+                                            )
+                    self.volumes[volume].add(chapter)
                 else:
-                    self.volumes[volume].list_chapters.append(chapter)
+                    self.volumes[volume].add(chapter)
 
                 self.chapters_in_volume.append(number_chapter)
-
 
 
     def __chapters_wo_volume_and_chapter_indicator(
@@ -192,10 +227,12 @@ class ChapterClassifierByVolume:
     ) -> None:
         """
         If volume is given but not chapters indicators is given.
-        If some chapters are not in volumes, they are grouped in a single volume.
+        If some chapters are not in volumes, they are grouped in a single
+        volume.
 
-        Args:
-            volume: integer, default is `None`.
+        Args
+            comic: `Comic` instance.
+            volume: integer, number of volume.
 
         """
         if volume is not None:
@@ -220,7 +257,7 @@ class ChapterClassifierByVolume:
                 else:
                     self.volumes[volume_key].list_chapters.append(chapter)
 
-                # add to chapters_in_volume list
+                # add to `chapters_in_volume` list
                 self.chapters_in_volume.append(chapter.id)
-                # remove of chapters_wo_volume dict
+                # remove of `chapters_wo_volume` dict
                 self.chapters_wo_volume.pop(chapter.id)

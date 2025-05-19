@@ -25,7 +25,7 @@ class ZonaTmo(metaclass=BaseMeta):
 #
 
 
-# comic page section
+# comic and list of chapters
     # title_comic = ".post-title > h1:nth-child(2)"  # css selector
     chapters_content_ul_class = [
         "#chapters",  # class selector

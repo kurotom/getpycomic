@@ -159,6 +159,16 @@ class Volume:
         """
         self.volume = volume
         self.list_chapters = list_chapters
+        self.n_chapters = 0
+
+    def add(
+        self,
+        chapter: Chapter
+    ) -> None:
+        """
+        """
+        self.list_chapters.append(chapter)
+        self.n_chapters += 1
 
     def get_range_chapters(
         self
@@ -192,7 +202,7 @@ class Volume:
         """
         return "<[ Volume: %d, Chapters: %d ]>" % (
                                                 self.volume,
-                                                len(self.list_chapters)
+                                                self.n_chapters
                                             )
 
     def __repr__(self) -> str:

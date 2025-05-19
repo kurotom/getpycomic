@@ -20,10 +20,12 @@ class Status:
     def __init__(
         self,
         controller: Controller,
-        base_path: str
+        base_path: str,
+        language: str,
     ) -> None:
         """
         """
+        self.language = language
         self.method = None  # str
         self.error = False  # bool
 
@@ -95,7 +97,8 @@ class Status:
         print("> to_load")
         data = JSONData.to_load(file_path=self.path_data_json)
 
-        print(data.keys())
+        # print(data.keys())
+
         if data != {}:
             if data["comic"] is not None:
                 comic_data = Comic.from_dict(data["comic"])
@@ -109,6 +112,6 @@ class Status:
 
             self.controller.current_comic = comic_data
 
-            self.status.comic_name = data["comic_name"]
-            self.status.chapter_id = data["chapter_id"]
-            self.status.imagechapter_id = data["imagechapter_id"]
+            self.comic_name = data["comic_name"]
+            self.chapter_id = data["chapter_id"]
+            self.imagechapter_id = data["imagechapter_id"]

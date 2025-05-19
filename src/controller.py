@@ -11,7 +11,7 @@ from src.models import (
 
 # from src.imagehandler import ImagesHandler
 from src.ziphandler import ZipHandler
-from src.chapter_by_volume import ChapterClassifierByVolume
+from src.chapter_by_volume import VolumesSorter
 from src.requests_data import RequestsData
 from src.pathclass import PathClass
 from src.status import Status
@@ -30,7 +30,9 @@ from src.engines import (
 #
 from src.pages import (
     TmoManga,
-    ZonaTmo
+    ZonaTmo,
+    NovelCool,
+
 )
 #
 
@@ -48,7 +50,9 @@ FilterTypes = Literal["id", "xpath", "tag_name", "css_selector"]
 
 Supported_Webs = {
     "tmomanga": TmoManga,
-    "zonatmo": ZonaTmo
+    "zonatmo": ZonaTmo,
+    "novelcool": NovelCool,
+
 }
 
 
@@ -62,11 +66,14 @@ class GetPyComic:
         self,
         web: Literal["tmomanga", "zonatmo"] = "tmomanga",
         engine: Literal["selenium", "playwright"] = "selenium",
+        language: Literal["en", "es", "br", "it", "ru", "de", "fr"] = "es",
         show: bool = True,
         setup: bool = True
     ) -> None:
         """
         """
+        self.language = language
+
         self.scraper = None
 
         self.current_comic = None  # `Comic` instance
@@ -84,9 +91,22 @@ class GetPyComic:
                                             "geckodriver"
                                         )
 
+        self.plugins_base = PathClass.join(
+                                    self.parent_path,
+                                    "drivers",
+                                    "plugins"
+                                )
+
+        self.plugins_paths = [
+                                PathClass.join(self.plugins_base, i)
+                                for i in PathClass.listdir(self.plugins_base)
+                            ]
+
+
         self.status = Status(
                             controller=self,
-                            base_path=self.parent_path
+                            base_path=self.parent_path,
+                            language=self.language,
                         )
 
         self.DIRECTORY_GETPYCOMIC = ""
@@ -103,6 +123,8 @@ class GetPyComic:
 
         if setup:
             self.change_engine(engine)
+
+
 
     def close_scraper(self) -> None:
         """
@@ -121,6 +143,13 @@ class GetPyComic:
         except KeyError as e:
             self.web_site = Supported_Webs["tmomanga"]
 
+        # website with language url
+        if hasattr(self.web_site, "language"):
+            self.web_site.language = self.language
+            self.web_site.base = self.web_site.page_language[self.web_site.language]
+            self.web_site.search_url = f"{self.web_site.base}{self.web_site.search_url}"
+
+
     def change_engine(
         self,
         engine: Literal["selenium", "playwright"]
@@ -133,6 +162,7 @@ class GetPyComic:
         if engine == "selenium":
             current_scraper = Selenium(
                                     geckodriver=self.geckodriver_path,
+                                    plugins=self.plugins_paths,
                                     show=self.show,
                                     setup=self.setup,
                                     status=self.status,
@@ -171,12 +201,12 @@ class GetPyComic:
     ) -> list:
         """
         """
-        print("search: ", self.web_site)
+        print("> search: ", self.web_site)
 
         if self.scraper is not None:
 
             results = self.scraper.search(
-                    string=search,
+                    string=search.replace(" ", "+"),
                     webclass=self.web_site,
                 )
 
@@ -188,10 +218,11 @@ class GetPyComic:
         comic: Comic,
         n_chapters: int = None,
         range: List[int] = None,
+        update: bool = False,
     ) -> Comic:
         """
         """
-        if self.scraper is not None:
+        if self.scraper is not None and isinstance(comic, Comic):
 
             self.current_comic = comic
 
@@ -200,11 +231,12 @@ class GetPyComic:
                                 webclass=self.web_site,
                                 n_chapters=n_chapters,
                                 range=range,
+                                update=update,
                             )
             return comic
 
-    # @register_error("get_images_chapter")
-    def get_images_chapter(
+    # @register_error("get_images")
+    def get_images(
         self,
         comic: Comic = None,
     ) -> Comic:
@@ -222,9 +254,7 @@ class GetPyComic:
                                     webclass=self.web_site,
                                 )
             return comic
-#
-#  scraper
-#
+
     @property
     def get_current_comic(self) -> list:
         """
@@ -235,25 +265,31 @@ class GetPyComic:
 #
     def save_comic(
         self,
-        comicObj: Comic = None,
+        comic: Comic = None,
         n_threads: int = 4,
     ) -> None:
         """
         """
-        if comicObj is None:
-            comicObj = self.current_comic
+        if comic is None:
+            comic = self.current_comic
+
+        replaces = {"": ["https://", "www."], "-": ["."]}
+        web_name_ = self.web_site.base
+        for k, v in replaces.items():
+            for i in v:
+                web_name_ = web_name_.replace(i, k)
 
         comic_path = PathClass.join(
                                     PathClass.get_desktop(),
                                     GetPyComic.DIRECTORY,
-                                    comicObj.name
+                                    f"{comic.name}-{web_name_}"
                                 )
 
-        comicObj.path = comic_path
+        comic.path = comic_path
 
         PathClass.makedirs(path=comic_path)
 
-        for chapter in comicObj.chapters:
+        for chapter in comic.chapters:
 
             chapter_dir = PathClass.join(
                                         comic_path,
@@ -267,6 +303,7 @@ class GetPyComic:
             n_images = len(chapter.images)
 
 
+# change for library of user agent
             user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
 
             if self.web_site.base[-1] != "/":
@@ -278,6 +315,7 @@ class GetPyComic:
                 "Referer": refer_site,  # avoid hotlinking
                 'User-Agent': user_agent,
             }
+###########
 
 
             if n_images < 10:
@@ -314,9 +352,9 @@ class GetPyComic:
 
     def sorter_chapters_by_volumes(
         self,
-        chapters_by_volume: dict,
+        chapters_by_volume: dict = None,
         comic: Comic = None,
-    ) -> Union[dict, None]:
+    ) -> Comic:
         """
         Sorter chapters downloaded into volumes using a diccionaries of digits,
         these values indicate the chapters to be stored in volumes.
@@ -355,17 +393,18 @@ class GetPyComic:
             comic = self.current_comic
 
 
-        ch_vl = ChapterClassifierByVolume()
+        ch_vl = VolumesSorter()
 
-        if isinstance(chapters_by_volume, dict):
-            chapters_sorter = ch_vl.sorter(
+
+        if isinstance(chapters_by_volume, dict) or chapters_by_volume is None:
+            volumes_chapters = ch_vl.sorter(
                         comicObj=comic,
                         chapters_by_volume=chapters_by_volume
                     )
 
             # print('#### > ', chapters_sorter)
 
-            comic.volumes = chapters_sorter
+            comic.volumes = volumes_chapters
             self.current_comic = comic
 
             return comic
@@ -387,33 +426,35 @@ class GetPyComic:
         # print(comic.path)
         # print(comic.volumes)
 
-        if comic.volumes is None:
+        if comic.volumes is None or comic.volumes == {}:
             return
 
-        for volume, volumechapterObj in comic.volumes.items():
+        for id_volume, volumechapterObj in comic.volumes.items():
 
             # print(f"{volume}".zfill(3), [i.path for i in chapters])
 
-            cbz_name = "%s - %s (%s).cbz" % (
-                comic.name.title(),
-                f"{volume}".zfill(3),
-                volumechapterObj.get_range_chapters()
-            )
+            if volumechapterObj.n_chapters > 0:
 
-            path_cbz = PathClass.join(
-                                    comic.path,
-                                    cbz_name
-                                )
-
-            print(">> ", path_cbz)
-
-            ZipHandler.to_zip(
-                    cbz_path=path_cbz,
-                    list_chapters=volumechapterObj.list_chapters
+                cbz_name = "%s - %s (%s).cbz" % (
+                    comic.name.title(),
+                    f"{id_volume}".zfill(3),
+                    volumechapterObj.get_range_chapters()
                 )
 
-            if preserve_images is False:
-                self.delete_images(list_chapters=volumechapterObj.list_chapters)
+                path_cbz = PathClass.join(
+                                        comic.path,
+                                        cbz_name
+                                    )
+
+                print(">> ", path_cbz)
+
+                ZipHandler.to_zip(
+                        cbz_path=path_cbz,
+                        list_chapters=volumechapterObj.list_chapters
+                    )
+
+                if preserve_images is False:
+                    self.delete_images(list_chapters=volumechapterObj.list_chapters)
 
     def delete_images(
         self,
