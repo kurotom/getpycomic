@@ -72,7 +72,7 @@ class VolumesSorter:
                 continue
             if isinstance(val, str):
                 values = val.split("-")
-            if isinstance(val, (list)):
+            if isinstance(val, (list, tuple)):
                 values = val
             seq_values.extend(int(i) for i in values)
 
