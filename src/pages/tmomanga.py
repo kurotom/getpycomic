@@ -45,5 +45,18 @@ class TmoManga(metaclass=BaseMeta):
 
 # into chapter page
     # content_images_comic_css = ".reading-content"  # css selector
+
+    container_selector_lector = None
+    chapter_selector_lector_button = None
+
+
     container_images_div_css = "#images_chapter"  # css selector
+
+
+    # index pages
+    index_pages = None
+    # select
+    seleted_tag = None
+    # option load 1 images
+    option_selected = None
 #

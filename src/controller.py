@@ -282,7 +282,7 @@ class GetPyComic:
         comic_path = PathClass.join(
                                     PathClass.get_desktop(),
                                     GetPyComic.DIRECTORY,
-                                    f"{comic.name}-{web_name_}"
+                                    f"{comic.name.title()}-{web_name_}"
                                 )
 
         comic.path = comic_path
@@ -300,55 +300,52 @@ class GetPyComic:
 
             chapter.path = chapter_dir
 
-            n_images = len(chapter.images)
-
 
 # change for library of user agent
-            user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+        user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
 
-            if self.web_site.base[-1] != "/":
-                refer_site = self.web_site.base + "/"
-            else:
-                refer_site = self.web_site.base
+        if self.web_site.base[-1] != "/":
+            refer_site = self.web_site.base + "/"
+        else:
+            refer_site = self.web_site.base
 
-            header_request = {
-                "Referer": refer_site,  # avoid hotlinking
-                'User-Agent': user_agent,
-            }
+        header_request = {
+                            "Referer": refer_site,  # avoid hotlinking
+                            'User-Agent': user_agent,
+                        }
 ###########
 
+        n_chapters = len(comic.chapters)
 
-            if n_images < 10:
+        if n_chapters < 50:
+            downloader_thread = Downloader(
+                                        chunk_chapters=comic.chapters,
+                                        header=header_request,
+                                        daemon=True
+                                    )
+
+            downloader_thread.start()
+            downloader_thread.join()
+
+        else:
+            threads_list = []
+            chunk_chapters = ceil(n_chapters / n_threads)
+
+            for i in range(0, n_chapters, chunk_chapters):
+                chunk = comic.chapters[0 + i : i + chunk_chapters]
+
                 downloader_thread = Downloader(
-                                            list_images=chapter.images,
-                                            chapter_path=chapter.path,
+                                            chunk_chapters=chunk,
                                             header=header_request,
                                             daemon=True
                                         )
 
+                threads_list.append(downloader_thread)
                 downloader_thread.start()
-                downloader_thread.join()
 
-            else:
-                threads_list = []
-                n_chunk_images = ceil(n_images / n_threads)
+            for th in threads_list:
+                th.join()
 
-                for i in range(0, n_images, n_chunk_images):
-                    chunk_images = chapter.images[i: i + n_chunk_images]
-
-                    downloader_thread = Downloader(
-                                                list_images=chunk_images,
-                                                chapter_path=chapter.path,
-                                                header=header_request,
-                                                daemon=True
-                                            )
-
-                    threads_list.append(downloader_thread)
-                    downloader_thread.start()
-
-
-                for th in threads_list:
-                    th.join()
 
     def sorter_chapters_by_volumes(
         self,

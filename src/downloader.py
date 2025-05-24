@@ -13,8 +13,7 @@ class Downloader(Thread):
 
     def __init__(
         self,
-        list_images: list,
-        chapter_path: str,
+        chunk_chapters: list,
         header: dict,
         daemon: bool = True,
     ) -> None:
@@ -22,8 +21,7 @@ class Downloader(Thread):
         """
         Thread.__init__(self, daemon=daemon)
         self.imagehandler = ImagesHandler()
-        self.chapter_path = chapter_path
-        self.list_images = list_images
+        self.chunk_chapters = chunk_chapters
         self.header = header
 
     def run(self) -> None:
@@ -31,37 +29,39 @@ class Downloader(Thread):
         Gets the images from the URL and saves them.
         """
         print(self)
-        for image in self.list_images:
+        for chapter in self.chunk_chapters:
 
-            # image.id
-            # image.name
-            # image.extention
-            # image.link
-            # print(image.name, image.extention)
+            for image in chapter.images:
+                # image.id
+                # image.name
+                # image.extention
+                # image.link
+                # print(image.name, image.extention)
 
-            image.extention = '.jpg'
-            image_path_ = PathClass.join(
-                                        self.chapter_path,
-                                        image.get_name()
-                                    )
-            image.path = image_path_
+                image.extention = '.jpg'
 
-            if PathClass.exists(image_path_) is False:
+                image_path_ = PathClass.join(
+                                            chapter.path,
+                                            image.get_name()
+                                        )
+                image.path = image_path_
 
-                # get image data from url
-                data = RequestsData.request_data(
-                        header=self.header,
-                        link=image.link
-                    )
+                if PathClass.exists(image_path_) is False:
 
-                if data is not None:
-                    new_image_data_ = self.imagehandler.new_image(
+                    # get image data from url
+                    data = RequestsData.request_data(
+                            header=self.header,
+                            link=image.link
+                        )
+
+                    if data is not None:
+                        new_image_data_ = self.imagehandler.new_image(
                                                             currentImage=data,
                                                             extention="jpeg",
                                                             sizeImage='small'
                                                         )
 
-                    self.imagehandler.save_image(
-                                            path_image=image.path,
-                                            image=new_image_data_
-                                        )
+                        self.imagehandler.save_image(
+                                                path_image=image.path,
+                                                image=new_image_data_
+                                            )

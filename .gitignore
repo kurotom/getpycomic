@@ -1,6 +1,7 @@
 */__pycache__
 __pycache__
-src/data.json
+*/data.json
+*.json
 a.py
 x.py
 notes.txt
