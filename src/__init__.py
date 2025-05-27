@@ -18,7 +18,7 @@ from src.engines import (
 
 from src.imagehandler import ImagesHandler
 from src.ziphandler import ZipHandler
-from src.chapter_by_volume import VolumesSorter
+from src.sorter_volume_chapter import VolumesSorter
 from src.requests_data import RequestsData
 from src.pathclass import PathClass
 from src.errorhandlerdecorator import register_error

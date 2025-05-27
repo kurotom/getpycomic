@@ -11,7 +11,7 @@ from src.models import (
 
 # from src.imagehandler import ImagesHandler
 from src.ziphandler import ZipHandler
-from src.chapter_by_volume import VolumesSorter
+from src.sorter_volume_chapter import VolumesSorter
 from src.requests_data import RequestsData
 from src.pathclass import PathClass
 from src.status import Status
@@ -206,7 +206,7 @@ class GetPyComic:
         if self.scraper is not None:
 
             results = self.scraper.search(
-                    string=search.replace(" ", "+"),
+                    string=search.replace(" ", "+").replace(".", ""),
                     webclass=self.web_site,
                 )
 
@@ -282,7 +282,7 @@ class GetPyComic:
         comic_path = PathClass.join(
                                     PathClass.get_desktop(),
                                     GetPyComic.DIRECTORY,
-                                    f"{comic.name.title()}-{web_name_}"
+                                    f"{comic.name}-{web_name_}"
                                 )
 
         comic.path = comic_path
@@ -347,10 +347,11 @@ class GetPyComic:
                 th.join()
 
 
-    def sorter_chapters_by_volumes(
+    def sorter_by_volumes(
         self,
-        chapters_by_volume: dict = None,
         comic: Comic = None,
+        chapters_by_volume: int = None,
+        volumes_dict_chapters: dict = None,
     ) -> Comic:
         """
         Sorter chapters downloaded into volumes using a diccionaries of digits,
@@ -368,43 +369,54 @@ class GetPyComic:
         Examples:
 
             # Single Comic
-            sorter_chapters_by_volumes(
-                chapters_by_volume={1: [1, 2], 2: [3, 5]}
+            sorter_by_volumes(
+                volumes_dict_chapters={1: [1, 2], 2: [3, 5]}
             )
 
-            sorter_chapters_by_volumes(
-                chapters_by_volume={1: "1-2", 2: "3-5"}
+            sorter_by_volumes(
+                volumes_dict_chapters={1: "1-2", 2: "3-5"}
             )
 
         Args
-            chapters_by_volume: dictionary for one comic book. The number of
-                                elements must be exactly the same.
             comic: instance of `Comic`, if not given, the current instance of
                    `Comic` will be used.
+            chapters_by_volume: int, number of chapter by volume. Has priority
+                                over `volumes_dict_chapters`.
+            volumes_dict_chapters: dictionary for one comic book. The number of
+                                elements must be exactly the same.
 
         Returns
             dict: returns a dicctionary with volume number as key and `Volume`
                   insance as value.
         """
+        # print(volumes_dict_chapters, chapters_by_volume, comic)
+
         if comic is None:
             comic = self.current_comic
 
 
         ch_vl = VolumesSorter()
 
+        if chapters_by_volume is not None and isinstance(chapters_by_volume, int):
+            chapters_by_volume = chapters_by_volume
+        elif volumes_dict_chapters is not None and isinstance(volumes_dict_chapters, dict):
+            volumes_dict_chapters = volumes_dict_chapters
+        else:
+            chapters_by_volume = None
+            volumes_dict_chapters = None
 
-        if isinstance(chapters_by_volume, dict) or chapters_by_volume is None:
-            volumes_chapters = ch_vl.sorter(
-                        comicObj=comic,
-                        chapters_by_volume=chapters_by_volume
-                    )
+        # print('#### > ', chapters_sorter)
 
-            # print('#### > ', chapters_sorter)
+        volumes_chapters = ch_vl.sorter(
+                                comicObj=comic,
+                                volumes_dict_chapters=volumes_dict_chapters,
+                                chapters_by_volume=chapters_by_volume
+                            )
 
-            comic.volumes = volumes_chapters
-            self.current_comic = comic
+        comic.volumes = volumes_chapters
+        self.current_comic = comic
 
-            return comic
+        return comic
 
 
     def to_cbz(
@@ -432,8 +444,8 @@ class GetPyComic:
 
             if volumechapterObj.n_chapters > 0:
 
-                cbz_name = "%s - %s (%s).cbz" % (
-                    comic.name.title(),
+                cbz_name = "%s-%s(%s).cbz" % (
+                    comic.name,
                     f"{id_volume}".zfill(3),
                     volumechapterObj.get_range_chapters()
                 )

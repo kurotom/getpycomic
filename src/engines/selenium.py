@@ -376,7 +376,7 @@ class Selenium(Base):
                     link = info_item.get_attribute("href")
 
                 comic = Comic(
-                        name=name.split("\n")[0],
+                        name=name.split("\n")[0].title().replace(" ", "_"),
                         link=link
                     )
                 results.append(comic)

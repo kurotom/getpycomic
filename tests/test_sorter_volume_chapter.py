@@ -2,7 +2,7 @@
 """
 """
 
-from src.chapter_by_volume import VolumesSorter
+from src.sorter_volume_chapter import VolumesSorter
 from src.models import (
         Comic,
         Chapter,
@@ -37,7 +37,7 @@ class TestVolumesSorter(unittest.TestCase):
         """
         r = self.classifier.sorter(
             comicObj=self.comic,
-            chapters_by_volume={
+            volumes_dict_chapters={
                 1: "1-2",
                 2: "3-4",
                 3: "5-6",
@@ -56,7 +56,7 @@ class TestVolumesSorter(unittest.TestCase):
         """
         r = self.classifier.sorter(
             comicObj=self.comic,
-            chapters_by_volume={
+            volumes_dict_chapters={
                 1: [1,2],
                 2: [3,4],
                 3: [5,6],
@@ -75,7 +75,7 @@ class TestVolumesSorter(unittest.TestCase):
         """
         r1 = self.classifier.sorter(
             comicObj=self.comic,
-            chapters_by_volume={
+            volumes_dict_chapters={
                 1: [1, 2],
                 2: [2, 3],
                 3: [3, 4]
@@ -84,7 +84,7 @@ class TestVolumesSorter(unittest.TestCase):
 
         r2 = self.classifier.sorter(
             comicObj=self.comic,
-            chapters_by_volume={
+            volumes_dict_chapters={
                 1: "1-2",
                 2: "2-3",
                 3: "3-4"
@@ -108,7 +108,7 @@ class TestVolumesSorter(unittest.TestCase):
         """
         r = self.classifier.sorter(
             comicObj=self.comic,
-            chapters_by_volume={
+            volumes_dict_chapters={
                 1: "1-2",
                 3: "3-4"
             }
@@ -120,7 +120,7 @@ class TestVolumesSorter(unittest.TestCase):
         """
         r = self.classifier.sorter(
             comicObj=self.comic,
-            chapters_by_volume={
+            volumes_dict_chapters={
                 1: "1-2",
                 2: "4-3"
             }
@@ -133,13 +133,25 @@ class TestVolumesSorter(unittest.TestCase):
         r = self.classifier.sorter()
         self.assertEqual(r, {})
 
-    def test_sort_not_chapters_by_volume(self):
+
+    def test_sort_chapters_by_volume_custom_value(self):
         """
         """
         r = self.classifier.sorter(
             comicObj=self.comic,
+            volumes_dict_chapters=None,
+            chapters_by_volume=1
+        )
+        self.assertIsInstance(r, dict)
+        self.assertEqual([i.n_chapters for i in r.values()], [1] * 3)
+
+    def test_sort_chapters_by_volume_default_value(self):
+        """
+        """
+        r = self.classifier.sorter(
+            comicObj=self.comic,
+            volumes_dict_chapters=None,
             chapters_by_volume=None
         )
-
         self.assertIsInstance(r, dict)
         self.assertEqual([i.n_chapters for i in r.values()], [3])

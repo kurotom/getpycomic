@@ -84,14 +84,15 @@ class VolumesSorter:
     def sorter(
         self,
         comicObj: Comic = None,
-        chapters_by_volume: dict = None
+        volumes_dict_chapters: dict = None,
+        chapters_by_volume: int = None,
     ) -> dict:
         """
         Sorts chapters by volume follow the indication given by user.
 
         In two formats:
-            * chapters_by_volume={volume_int: "start-end"}
-            * chapters_by_volume={volume_int: [star, end]}
+            * volumes_dict_chapters={volume_int: "start-end"}
+            * volumes_dict_chapters={volume_int: [star, end]}
 
         *volume_int* must be an integer.
         *start* and *end* must be integers or a string of an integer.
@@ -103,7 +104,9 @@ class VolumesSorter:
 
         Args
             comicObj: `Comic` instance with chapters of comic.
-            chapter_by_volume: dicctionary with order of volumes and chapters.
+            volumes_dict_chapters: dicctionary with order of volumes and
+                                   chapters.
+            chapters_by_volume: int, number of chapters by volume.
 
         Returns
             dict: dicctionary with volumes and chapters.
@@ -115,24 +118,30 @@ class VolumesSorter:
         if comicObj is None or isinstance(comicObj, Comic) is False:
             return {}
 
-        # if chapters_by_volume is None, each volume has 6 chapters
-        if chapters_by_volume is None or len(chapters_by_volume) == 0:
-            chapters_by_volume = {}
+        # if volumes_dict_chapters is None
+        if volumes_dict_chapters is None or len(volumes_dict_chapters) == 0:
+            volumes_dict_chapters = {}
             volume_ = 1
             n_chaps = len(comicObj.chapters)
-            for i in range(0, n_chaps, VolumesSorter.CHAPTERS_BY_VOLUME):
-                chunk = comicObj.chapters[0 + i: VolumesSorter.CHAPTERS_BY_VOLUME + i]
+
+            if chapters_by_volume is not None:
+                chapters_by_volume = chapters_by_volume
+            else:
+                chapters_by_volume = VolumesSorter.CHAPTERS_BY_VOLUME
+
+            for i in range(0, n_chaps, chapters_by_volume):
+                chunk = comicObj.chapters[0 + i: chapters_by_volume + i]
                 chap_ids = [i.id for i in chunk]
-                chapters_by_volume[volume_] = [min(chap_ids), max(chap_ids)]
+                volumes_dict_chapters[volume_] = [min(chap_ids), max(chap_ids)]
                 volume_ += 1
 
-        check = self.__sequence_check(matrix=chapters_by_volume)
+        check = self.__sequence_check(matrix=volumes_dict_chapters)
         # print(">> ", check, chapters_by_volume)
         if check is False:
             return {}
 
         try:
-            for k, v in chapters_by_volume.items():
+            for k, v in volumes_dict_chapters.items():
                 if isinstance(v, str):
                     if v != "":
                         v = [int(x) for x in v.split("-")]
