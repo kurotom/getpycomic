@@ -14,11 +14,11 @@ def register_error(error_type):
                 return func(self, *args, **kwargs)
 
             except Exception as e:
-                print(e)
                 class_name = self.__class__.__name__
                 method_name = func.__name__
 
-                print(">>  Exception - register_error", class_name, method_name)
+                print(f">> Exception: {class_name} -> {method_name}")
+                print(e)
 
                 self.status.method = f"{class_name}.{method_name}"
                 self.status.error = True

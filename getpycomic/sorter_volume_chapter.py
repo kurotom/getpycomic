@@ -7,7 +7,7 @@ from typing import (
         Union
     )
 
-from src.models import (
+from getpycomic.models import (
         Comic,
         Chapter,
         Volume
@@ -54,16 +54,16 @@ class VolumesSorter:
         # checks if `keys` is a sequence
         seq_keys = list(matrix.keys())
         # print(seq_keys)
-        if seq_keys != [i for i in range(1, len(seq_keys) + 1)]:
+        min_ = min(list(matrix.keys()))
+        max_ = max(list(matrix.keys()))
+        if seq_keys != [i for i in range(min_, max_ + 1)]:
             return False
 
         # checks if `values` is a sequence
         seq_values = [
                     int(x) for i in matrix.values()
                     if i != ""
-                    for x in (i.split("-")
-                         if isinstance(i, str) else i
-                     )
+                    for x in (i.split("-") if isinstance(i, str) else i)
                 ]
 
         seq_values = []
@@ -114,6 +114,8 @@ class VolumesSorter:
         """
         self.clear()
 
+        # print("> " , volumes_dict_chapters, chapters_by_volume)
+
         # print(comicObj, chapters_by_volume)
         if comicObj is None or isinstance(comicObj, Comic) is False:
             return {}
@@ -134,6 +136,8 @@ class VolumesSorter:
                 chap_ids = [i.id for i in chunk]
                 volumes_dict_chapters[volume_] = [min(chap_ids), max(chap_ids)]
                 volume_ += 1
+
+        # print(volumes_dict_chapters)
 
         check = self.__sequence_check(matrix=volumes_dict_chapters)
         # print(">> ", check, chapters_by_volume)

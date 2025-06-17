@@ -4,7 +4,7 @@ version = "0.1.0"
 description = ""
 authors = ["kurotom <55354389+kurotom@users.noreply.github.com>"]
 readme = "README.md"
-packages = [{include = "src"}]
+packages = [{include = "getpycomic"}]
 
 [tool.poetry.dependencies]
 python = "^3.9"
@@ -12,6 +12,10 @@ selenium = "^4.22.0"
 requests = "^2.32.3"
 pillow = "^10.4.0"
 platformdirs = "^4.3.7"
+fake-useragent = "^2.2.0"
+
+[tool.poetry.scripts]
+getpycomic = 'getpycomic.cli:main'
 
 [build-system]
 requires = ["poetry-core"]

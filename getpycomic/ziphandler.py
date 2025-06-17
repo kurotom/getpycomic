@@ -3,7 +3,7 @@
 Handler related to files ZIP.
 """
 
-from src.models import Chapter
+from getpycomic.models import Chapter
 
 import zipfile
 

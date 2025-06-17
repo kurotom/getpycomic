@@ -28,7 +28,6 @@ class ImageChapter:
         name: str,
         extention: str,
         link: str,
-        # data: Union[io.BytesIO, bytes] = None,
         path: str = None,
     ) -> None:
         """
@@ -37,7 +36,6 @@ class ImageChapter:
         self.name = name
         self.extention = extention
         self.link = link
-        # self.data = data
         self.path = path
 
     def get_name(self) -> str:
@@ -98,6 +96,11 @@ class Chapter:
         self.link = link
         self.images = images
         self.path = path
+
+    def amount_images(self) -> int:
+        """
+        """
+        return len(self.images)
 
     @property
     def get_id(self) -> str:
@@ -218,6 +221,7 @@ class Comic:
     def __init__(
         self,
         name: str = None,
+        original_name: str = None,
         link: str = None,
         chapters: List[Chapter] = [],
         path: str = None,
@@ -226,6 +230,7 @@ class Comic:
         """
         """
         self.name = name
+        self.original_name = original_name
         self.link = link
         self.chapters = chapters
         self.path = path

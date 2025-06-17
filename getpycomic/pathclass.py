@@ -4,10 +4,15 @@
 """
 
 import os
+import re
 import shutil
 import platformdirs
+from pathlib import Path
 
-from typing import Tuple
+from typing import (
+    Tuple,
+    Union
+)
 
 
 class PathClass:
@@ -136,3 +141,61 @@ class PathClass:
         except FileExistsError:
             pass
         return PathClass.exists(path)
+
+    def walk(
+        path
+    ) -> object:
+        """
+        """
+        if PathClass.is_dir(path) is False:
+            return
+        return os.walk(path)
+
+    def is_file(
+        path: str
+    ) -> bool:
+        """
+        """
+        return os.path.isfile(path)
+
+    def is_dir(
+        path: str
+    ) -> bool:
+        """
+        """
+        return os.path.isdir(path)
+
+    def get_files_recursive(
+        extensions: Union[str, list],
+        directory: str
+    ) -> list:
+        """
+        Recursively scans a directory looking for valid files using extensions.
+
+        Args
+            extensions: string or list of strings with the extensions that will
+                        be used to filter the files.
+            directory: directory path.
+
+        Returns
+            list: list of `Path` instances.
+        """
+        results = []
+        if isinstance(extensions, str):
+            extensions = [extensions]
+
+        dirPath = Path(directory)
+
+        for ext in extensions:
+            if ext.startswith("."):
+                ext = ext.replace(".", "")
+            pattern = rf'.*\.{ext}$'
+            results += [
+                            i
+                            for i in PathClass.listdir(dirPath)
+                            if re.findall(pattern, str(i), re.IGNORECASE)
+                        ]
+
+        results = list(set(results))
+
+        return results

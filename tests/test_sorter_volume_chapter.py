@@ -2,8 +2,8 @@
 """
 """
 
-from src.sorter_volume_chapter import VolumesSorter
-from src.models import (
+from getpycomic.sorter_volume_chapter import VolumesSorter
+from getpycomic.models import (
         Comic,
         Chapter,
         ImageChapter

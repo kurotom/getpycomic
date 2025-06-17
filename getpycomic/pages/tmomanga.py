@@ -2,13 +2,13 @@
 """
 """
 
-from src.pages.base import BaseMeta
+from getpycomic.pages.base import BaseMeta
 
 
 class TmoManga(metaclass=BaseMeta):
 
     base = "https://tmomanga.com"
-    search_url = base + "/biblioteca?search=NONE&page=1"
+    search_url = base + "/biblioteca?search=NONE"
 
 # search
     # search_button = ".open-search-main-menu"  # css selector

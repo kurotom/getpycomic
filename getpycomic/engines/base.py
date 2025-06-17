@@ -37,12 +37,6 @@ class Base(metaclass=ABCMeta):
         raise NotImplementedError()
 
     @abstractmethod
-    def iterate_chapters(self) -> None:
-        """
-        """
-        raise NotImplementedError()
-
-    @abstractmethod
     def get_images(self) -> None:
         """
         """

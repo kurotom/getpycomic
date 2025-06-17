@@ -2,7 +2,7 @@
 """
 """
 
-from src.pages.base import BaseMeta
+from getpycomic.pages.base import BaseMeta
 
 
 class ZonaTmo(metaclass=BaseMeta):

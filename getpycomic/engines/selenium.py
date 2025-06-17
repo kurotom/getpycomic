@@ -33,22 +33,25 @@ import random
 from math import ceil
 from queue import Queue
 
-from src.engines.base import Base
+from getpycomic.engines.base import Base
 
-from src.models import (
+from getpycomic.models import (
         Comic,
         Chapter,
         ImageChapter
     )
 
-from src.pathclass import PathClass
-from src.errorhandlerdecorator import register_error
-from src.status import Status
+from getpycomic.pathclass import PathClass
+from getpycomic.errorhandlerdecorator import register_error
+from getpycomic.status import Status
 
 
-from src.utils import normalize_number
+from getpycomic.utils import (
+    normalize_number,
+    get_user_agent
+)
 
-from src.engines.thread_selenium import ThreadSelenium
+from getpycomic.engines.thread_selenium import ThreadSelenium
 
 
 from typing import (
@@ -68,22 +71,29 @@ class Selenium(Base):
     def __init__(
         self,
         geckodriver: str,
+        binary: str = None,
         plugins: list = [],
         show: bool = True,
         setup: bool = True,
         status: Status = None,
+        debug: bool = False,
     ) -> None:
         """
         """
         self.driver = None
         self.show = show
         self.status = status
+        self.debug = debug
 
+        self.binary = binary
         self.geckodriver = geckodriver
         self.plugins = plugins
 
         if setup:
-            self.setup()
+            try:
+                self.setup()
+            except Exception as e:
+                print("Error during setup ", e)
 
         sleep(1)
 
@@ -101,9 +111,14 @@ class Selenium(Base):
         """
         servicio = Service(executable_path=self.geckodriver)
 
-        user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+        user_agent = get_user_agent()
 
         op = Options()
+
+        # sets binary of navegator
+        if self.binary is not None:
+            op.binary_location = self.binary
+
         profile = FirefoxProfile()
 
         ######### Chrome
@@ -300,7 +315,7 @@ class Selenium(Base):
                                         By.CSS_SELECTOR,
                                         selector
                                     )
-                # print(selector, results)
+                # print(selector, len(results))
                 if results != []:
                     return results
                 sleep(0.5)
@@ -336,16 +351,16 @@ class Selenium(Base):
 
         url = webclass.search_url.replace("NONE", string)
 
-        print(">> search", url)
+        # print(">> search", url)
 
         self.driver.get(url)
 
-        sleep(0.5)
+        sleep(1)
 
+        if self.debug:
+            print("> search ", webclass)
 
         if "novelcool" in url:
-            sleep(1)
-            print("> ", webclass)
             self.driver.execute_script("window.stop();")
 
 
@@ -375,8 +390,13 @@ class Selenium(Base):
                     name = info_item.get_attribute("innerText")
                     link = info_item.get_attribute("href")
 
+
+                if "novelcool" in url and "novel" in name.lower():
+                    continue
+
                 comic = Comic(
                         name=name.split("\n")[0].title().replace(" ", "_"),
+                        original_name=name.split("\n")[0],
                         link=link
                     )
                 results.append(comic)
@@ -388,7 +408,7 @@ class Selenium(Base):
         self,
         comic: Comic,
         webclass: object,
-        n_chapters: int = None,
+        n_chapters: List[int] = None,
         range: List[int] = None,
         update: bool = False
     ) -> Comic:
@@ -399,7 +419,8 @@ class Selenium(Base):
         Args:
             comic: `Comic` instance.
             webclass: engine to get data.
-            n_chapters: positive integer to limit the number of chapters.
+            n_chapters: positive integer or list of integers specifying the
+                        chapters.
             range: list of two positives integers, sets range of chapters to
                    get, for example [1, 10].
             update: bool, gets only new chapters from the `Comic` chapter list.
@@ -409,6 +430,14 @@ class Selenium(Base):
         Returns:
             comic: `Comic` instance with updated chapters.
         """
+        if self.debug:
+            print("> get_chapters",
+                        webclass,
+                        n_chapters,
+                        range,
+                        update,
+                    )
+
         if comic.link:
             self.driver.get(comic.link)
 
@@ -422,9 +451,9 @@ class Selenium(Base):
 
             try:
                 button_show_ = chapters_ul_list.find_elements(
-                                                By.CSS_SELECTOR,
-                                                webclass.button_show_all_chapters
-                                            )
+                                            By.CSS_SELECTOR,
+                                            webclass.button_show_all_chapters
+                                        )
                 button_show_.click()
 
                 sleep(0.5)
@@ -436,126 +465,113 @@ class Selenium(Base):
                                                 selectors=webclass.chapter_css
                                             )
 
-            print("list_chapters ", len(list_chapters))
+            list_chapters = list_chapters[::-1]
+
+
+            chapters_comic_list = []
+            chapter_id = 1.0
+
+            for li_item_ in list_chapters:
+
+                try:
+                    a_item_ = li_item_.find_element(
+                                                By.CSS_SELECTOR,
+                                                webclass.chaper_name_class
+                                            )
+
+                except NoSuchElementException as e:
+                    a_item_ = li_item_.find_element(
+                                                By.TAG_NAME,
+                                                "div"
+                                            )
+
+                name_chapter = a_item_.get_attribute("innerText").strip()
+
+                try:
+                    link_item_ = li_item_.find_element(
+                                                    By.CSS_SELECTOR,
+                                                    webclass.chapter_link_class
+                                                )
+                    link_chapter = link_item_.get_attribute("href").strip()
+
+                except Exception as e:
+                    link_chapter = a_item_.get_attribute("href").strip()
+
+                # gets the chapter number of the html element
+                regex_number_ = re.findall(
+                                    r'(?:ch(?:\.|ap|apter)?|cap(?:[íi]tulo)?|ep(?:\.|isode)?)\s*[:\-]?\s*(\d+(?:[.,]\d+)?)',
+                                    name_chapter,
+                                    re.IGNORECASE
+                                )
+
+                if regex_number_ != []:
+                    chapter_number = float(normalize_number(regex_number_[0]))
+                else:
+                    chapter_number = chapter_id
+                    chapter_id += 1
+
+
+                self.status.chapter_id = link_chapter
+
+                chapterObj = Chapter(
+                                id=chapter_number,
+                                name=f"{chapter_number}",
+                                link=link_chapter
+                            )
+
+                if self.debug:
+                    print("> ", name_chapter, chapter_number, link_chapter, chapterObj)
+
+                chapters_comic_list.append(chapterObj)
+
+            # natural sort
+            chapters_comic_list.sort()
+            chapters_comic = []
+
+            if self.debug:
+                print("Number of chapters ", len(chapters_comic_list))
 
             if update:
-                chapters_comic = list_chapters[len(comic.chapters):]
-                self.iterate_chapters(
-                                        comicObj=comic,
-                                        webclass=webclass,
-                                        list_chapters=chapters_comic
-                                    )
+                chapters_comic = [
+                                    item
+                                    for item in chapters_comic_list
+                                    if item.id > n_chapters[0]
+                                ]
+
             else:
                 if n_chapters is not None:
-                    chapters_comic = list_chapters[:abs(n_chapters)]
-                    self.iterate_chapters(
-                                            comicObj=comic,
-                                            webclass=webclass,
-                                            list_chapters=chapters_comic
-
-                                        )
+                    chapters_comic = [
+                                        item
+                                        for item in chapters_comic_list
+                                        if item.id in n_chapters
+                                    ]
 
                 elif range is not None:
-                    chapters_comic = list_chapters[range[0], range[1]]
-                    self.iterate_chapters(
-                                            comicObj=comic,
-                                            webclass=webclass,
-                                            list_chapters=chapters_comic
-                                        )
-
+                    chapters_comic = [
+                                item
+                                for item in chapters_comic_list
+                                if item.id > range[0] and item.id <= range[1]
+                            ]
                 else:
-                    self.iterate_chapters(
-                                            comicObj=comic,
-                                            webclass=webclass,
-                                            list_chapters=list_chapters
-                                        )
-            return comic
+                    chapters_comic = chapters_comic_list
 
-    @register_error("iterate_chapters")
-    def iterate_chapters(
-        self,
-        comicObj: Comic,
-        webclass: object,
-        list_chapters: List[Chapter]
-    ) -> None:
-        """
-        """
-        print("> iterate_chapters ")
-        chapters_comic_list = []
-        n_chapters = len(list_chapters)
+            # print(len(chapters_comic_list), len(chapters_comic))
 
-        for li_item_ in list_chapters:
+            comic.chapters = chapters_comic
 
-            try:
-                a_item_ = li_item_.find_element(
-                                            By.CSS_SELECTOR,
-                                            webclass.chaper_name_class
-                                        )
-
-            except NoSuchElementException as e:
-                a_item_ = li_item_.find_element(
-                                            By.TAG_NAME,
-                                            "div"
-                                        )
-
-            name_chapter = a_item_.get_attribute("innerText").strip()
-
-            try:
-                link_item_ = li_item_.find_element(
-                                                By.CSS_SELECTOR,
-                                                webclass.chapter_link_class
-                                            )
-                link_chapter = link_item_.get_attribute("href").strip()
-
-            except Exception as e:
-                link_chapter = a_item_.get_attribute("href").strip()
-
-            print(">> ", name_chapter, link_chapter)
-
-
-            # gets chapter number of element html
-            regex_number_ = re.findall(
-                                r'(?:ch(?:\.|ap|apter)?|cap(?:[íi]tulo)?|ep(?:\.|isode)?)\s*[:\-]?\s*(\d+(?:[.,]\d+)?)',
-                                name_chapter,
-                                re.IGNORECASE
-                            )
-
-            if regex_number_ != []:
-                chapter_number = float(normalize_number(regex_number_[0]))
+            # if more 50 chapters go to threading
+            if len(comic.chapters) > 20:
+                self.to_thread_scraping(
+                                    comicObj=comic,
+                                    webclass=webclass,
+                                )
             else:
-                chapter_number = float(n_chapters)
-
-            print("> ", chapter_number)
-
-            self.status.chapter_id = link_chapter
-
-            chapterObj = Chapter(
-                            id=chapter_number,
-                            name=f"{chapter_number}",
-                            link=link_chapter
-                        )
-
-            print("__________", chapterObj)
-
-            chapters_comic_list.append(chapterObj)
-
-        # natural sort
-        chapters_comic_list.sort()
-        comicObj.chapters = chapters_comic_list
-
-
-        # if more 100 chapters go to threading
-        if len(comicObj.chapters) > 100:
-            self.to_thread_scraping(
-                                comicObj=comicObj,
+                self.iterate_get_chapter_images(
+                                comicObj=comic,
                                 webclass=webclass,
                             )
-            return
-        else:
-            self.iterate_get_chapter_images(
-                            comicObj=comicObj,
-                            webclass=webclass,
-                        )
+
+            return comic
 
     def iterate_get_chapter_images(
         self,
@@ -563,10 +579,12 @@ class Selenium(Base):
         webclass: object,
         list_chapters: list = None,  # used by thread
         is_thread: bool = False,  # used by thread
-        # cookies: dict = None,  # used by thread
     ) -> None:
         """
         """
+        if self.debug:
+            print("> iterate_get_chapter_images")
+
         chapters_comic_list = []
 
         # main tab of driver
@@ -586,12 +604,10 @@ class Selenium(Base):
             # print("> ", self.driver.current_url, self.driver.window_handles)
 
             if webclass.container_selector_lector is not None:
-            # try:
-                # selector lector chapter webpage
                 self.wait_to_load_content_change_tab(
-                    element=webclass.container_selector_lector,
-                    time=10
-                )
+                                    element=webclass.container_selector_lector,
+                                    time=10
+                                )
 
                 container_selector_lector = self.wait_for_element(
                                 type="css_selector",
@@ -616,7 +632,38 @@ class Selenium(Base):
 
                 sleep(1)
 
-            # except AttributeError,  as e:
+                # change to all images of page
+                index_pages_label = self.wait_for_element(
+                                            type="css_selector",
+                                            html_element=webclass.index_pages
+                                        )
+                # print(index_pages_label)
+                n_ = index_pages_label.get_attribute("innerText").split(" ")[-1]
+
+                select_element = self.wait_for_element(
+                                            type="css_selector",
+                                            html_element=webclass.seleted_tag
+                                        )
+                # print(select_element)
+
+                options_select_ = self.element_find_elements(
+                                        element=select_element,
+                                        selectors=[webclass.options_select],
+                                    )
+                # print(options_select_)
+
+                options_select_[0].click()
+
+                if int(n_) > 10:
+                    self.driver.execute_script(
+                                "arguments[0].setAttribute('value', arguments[1])",
+                                options_select_[-1],
+                                n_
+                            )
+                    options_select_[-1].click()
+                    sleep(1)
+
+                # input(">>>>>>>>>>>>>>> ")
             else:
                 # pages without lector selector
                 self.wait_to_load_content_change_tab(
@@ -628,8 +675,6 @@ class Selenium(Base):
             # real url of chapter
             url_chapter = self.driver.current_url
 
-            print("> url_chapter", url_chapter)
-
             chapter.link = url_chapter
 
             self.get_images(
@@ -639,6 +684,8 @@ class Selenium(Base):
 
             chapters_comic_list.append(chapter)
 
+            if self.debug:
+                print("> ", chapter, len(chapter.images))
 
             # close current tab
             self.driver.close()
@@ -653,146 +700,6 @@ class Selenium(Base):
         else:
             return chapters_comic_list
 
-    # def iterate_chapters_get(
-    #     self,
-    #     comicObj: Comic,
-    #     webclass: object,
-    #     list_chapters: List[Chapter]
-    # ) -> None:
-    #     """
-    #     """
-    #     chapters_comic_list = []
-    #     n_chapters = len(list_chapters)
-    #
-    #     # main tab of driver
-    #     main_tab_ = self.driver.current_window_handle
-    #
-    #     for li_item_ in list_chapters:
-    #
-    #         try:
-    #             a_item_ = li_item_.find_element(
-    #                                         By.CSS_SELECTOR,
-    #                                         webclass.chaper_name_class
-    #                                     )
-    #
-    #         except NoSuchElementException as e:
-    #             a_item_ = li_item_.find_element(
-    #                                         By.TAG_NAME,
-    #                                         "div"
-    #                                     )
-    #
-    #         name_chapter = a_item_.get_attribute("innerText").strip()
-    #
-    #         try:
-    #             link_item_ = li_item_.find_element(By.CSS_SELECTOR, webclass.chapter_link_class)
-    #             link_chapter = link_item_.get_attribute("href").strip()
-    #         except Exception as e:
-    #             link_chapter = a_item_.get_attribute("href").strip()
-    #
-    #         print(">> ", name_chapter, link_chapter)
-    #
-    #
-    #         regex_number_ = re.findall(
-    #                             r'(?:ch(?:\.|ap|apter)?|cap(?:[íi]tulo)?|ep(?:\.|isode)?)\s*[:\-]?\s*(\d+(?:[.,]\d+)?)',
-    #                             name_chapter,
-    #                             re.IGNORECASE
-    #                         )
-    #
-    #
-    #         if regex_number_ != []:
-    #             chapter_number = float(normalize_number(regex_number_[0]))
-    #         else:
-    #             chapter_number = float(n_chapters)
-    #
-    #         print("> ", chapter_number)
-    #
-    #
-    #         self.status.chapter_id = chapter_number
-    #
-    #
-    #         # open chapter link to new tab for images
-    #         self.driver.execute_script(
-    #                                 f"window.open('{link_chapter}', '_blank');"
-    #                             )
-    #
-    #         # print("> ", self.driver.current_url, self.driver.window_handles)
-    #
-    #
-    #         try:
-    #             # selector lector chapter webpage
-    #             self.wait_to_load_content_change_tab(
-    #                 element=webclass.container_selector_lector,
-    #                 time=10
-    #             )
-    #
-    #             container_selector_lector = self.wait_for_element(
-    #                             type="css_selector",
-    #                             html_element=webclass.container_selector_lector
-    #                         )
-    #
-    #             lectors_buttons = self.element_find_elements(
-    #                             element=container_selector_lector,
-    #                             selectors=[webclass.chapter_selector_lector_button]
-    #                         )
-    #
-    #             # randomize button list
-    #             selected_id = random.randint(0, len(lectors_buttons)) - 1
-    #             for i in range(0, random.randint(0, 10)):
-    #                 random.shuffle(lectors_buttons)
-    #
-    #             # move to button selected
-    #             actions = ActionChains(self.driver)
-    #             actions.move_to_element(lectors_buttons[selected_id]).perform()
-    #
-    #             lectors_buttons[selected_id].click()
-    #
-    #             sleep(1)
-    #
-    #         except AttributeError as e:
-    #             # pages without lector selector
-    #             self.wait_to_load_content_change_tab(
-    #                 element=webclass.container_images_div_css,
-    #                 time=10
-    #             )
-    #
-    #
-    #         # real url of chapter
-    #         url_chapter = self.driver.current_url
-    #
-    #         print("> url_chapter", url_chapter)
-    #
-    #
-    #         chapterObj = Chapter(
-    #                         id=chapter_number,
-    #                         name=f"{chapter_number}",
-    #                         link=url_chapter
-    #                     )
-    #
-    #         print("__________", chapterObj)
-    #
-    #
-    #         self.get_images(
-    #                             chapter=chapterObj,
-    #                             webclass=webclass,
-    #                         )
-    #
-    #         chapters_comic_list.append(chapterObj)
-    #
-    #
-    #         # close current tab
-    #         self.driver.close()
-    #         # return to main tab
-    #         self.driver.switch_to.window(main_tab_)
-    #
-    #         n_chapters -= 1
-    #
-    #         # input("input >>>")
-    #
-    #     # natural sort
-    #     chapters_comic_list.sort()
-    #     comicObj.chapters = chapters_comic_list
-
-
     @register_error("get_images")
     def get_images(
         self,
@@ -801,14 +708,16 @@ class Selenium(Base):
     ) -> None:
         """
         """
-        print("> get_images ", len(chapter.images), chapter.link)
+        if self.debug:
+            print("> get_images ", chapter)
 
         images_div_ = self.wait_for_element(
                                 type="css_selector",
                                 html_element=webclass.container_images_div_css
                             )
 
-        print("> container images", images_div_.is_displayed())
+        if self.debug:
+            print("> container is_displayed()", images_div_.is_displayed())
 
         chapter_images = []
         id_ = 1
@@ -828,7 +737,7 @@ class Selenium(Base):
                         selectors=["img"]
                     )
 
-        print("> images", len(list_images_))
+        # print("> images", len(list_images_))
 
         for img in list_images_:
 
@@ -864,6 +773,8 @@ class Selenium(Base):
     ) -> None:
         """
         """
+        if self.debug:
+            print("> to_thread_scraping")
 
         cookies = self.driver.get_cookies()
 
@@ -874,19 +785,22 @@ class Selenium(Base):
         threads_list = []
         queue = Queue()
 
-        print("> n_chapters", n_chapters)
+        # print("> n_chapters", n_chapters)
         for i in range(0, n_chapters, range_chapters):
-            print("> ", 0 + i, i + range_chapters)
+            if self.debug:
+                print("> chapters range", 0 + i, i + range_chapters)
 
             chunk = comicObj.chapters[0 + i : i + range_chapters]
 
             # new instance Selenium class
             scraperInstace = Selenium(
                                     geckodriver=self.geckodriver,
+                                    binary=self.binary,
                                     plugins=self.plugins,
                                     show=self.show,
                                     setup=False,
-                                    status=self.status
+                                    status=self.status,
+                                    debug=self.debug,
                                 )
 
             # pass to thread:
@@ -901,14 +815,16 @@ class Selenium(Base):
                             webclass=webclass,
                             container_queue=queue,
                             chunk_chapters=chunk,
+                            debug=self.debug
                         )
             threads_list.append(th)
             th.start()
 
             sleep(0.5)
 
-            # th.join()
-            # break  # test
+            #############  test
+            # th.join()  # test
+            # break      # test
 
         for th in threads_list:
             th.join()

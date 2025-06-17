@@ -2,7 +2,7 @@
 """
 
 Options for resize images.
-* 'preserve' :  original size.
+* 'original' :  original size.
 * 'small'     :  800 x 1200.
 * 'medium'    :  1000 x 1500.
 * 'large'     :  1200 x 1800.
@@ -31,15 +31,15 @@ class ImagesHandler:
         'WEBP': 'webp',
     }
     sizeImageDict = {
-        'preserve': None,
+        'original': None,
         'small': (800, 1200),
         'medium': (1000, 1500),
         'large': (1200, 1800),
     }
 
+    @staticmethod
     def get_size(
-        self,
-        size: str = 'preserve'
+        size: str = 'original'
     ) -> tuple:
         """
         Returns tupe of size.
@@ -55,11 +55,11 @@ class ImagesHandler:
         except KeyError:
             return ImagesHandler.sizeImageDict['small']
 
+    @staticmethod
     def new_image(
-        self,
         currentImage: bytes,
         extention: str = "jpeg",
-        sizeImage: Literal["preserve", "small", "medium", "large"] = "preserve",
+        sizeImage: Literal["original", "small", "medium", "large"] = "original",
     ) -> io.BytesIO:
         """
         Resize image.
@@ -68,12 +68,12 @@ class ImagesHandler:
             currentImage: bytes of image.
             extention: extention of new image.
             sizeImage: category of size to resize original image. Default is
-                       'preserve'.
+                       'original'.
 
         Returns:
 
         """
-        size_tuple = self.get_size(size=sizeImage)
+        size_tuple = ImagesHandler.get_size(size=sizeImage)
         newImageIO = io.BytesIO()
 
         with Image.open(currentImage) as image_:
@@ -96,8 +96,8 @@ class ImagesHandler:
 
         return newImageIO
 
+    @staticmethod
     def save_image(
-        self,
         path_image: str,
         image: Union[io.BytesIO, bytes]
     ) -> bool:
@@ -111,5 +111,5 @@ class ImagesHandler:
                     file.write(image)
                 return True
         except Exception as e:
-            print(e)
+            print("Error: ImagesHandler", e)
             return False

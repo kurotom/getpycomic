@@ -1,8 +1,11 @@
 */__pycache__
 __pycache__
+dist/
 */data.json
 *.json
 a.py
 x.py
+c.py
 notes.txt
 run.py
+

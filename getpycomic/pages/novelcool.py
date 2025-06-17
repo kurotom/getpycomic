@@ -2,7 +2,7 @@
 """
 """
 
-from src.pages.base import BaseMeta
+from getpycomic.pages.base import BaseMeta
 
 
 class NovelCool(metaclass=BaseMeta):
@@ -22,7 +22,8 @@ class NovelCool(metaclass=BaseMeta):
     # if the web page has several languages leave it blank
     base = ""
 
-    search_url = base + "/search/?wd=NONE&page=1"
+    # search_url = base + "/search/?wd=NONE&page=1&category_id=%2C1413"
+    search_url = base + "/search/?wd=NONE"
 
 # search
     # search_button = ".open-search-main-menu"  # css selector
@@ -64,8 +65,8 @@ class NovelCool(metaclass=BaseMeta):
     # index pages
     index_pages = ".btn > span:nth-child(1) > em:nth-child(1) > a:nth-child(1)"
     # select
-    seleted_tag = "div.mangaread-page:nth-child(3) > div:nth-child(1) > select:nth-child(3)"
+    seleted_tag = ".change_pic_no"
     # option load 1 images
-    option_selected = "option:nth-child(n)"
+    options_select = "option:nth-child(n)"
     # # option load 10 images
     # "option:nth-child(4)"

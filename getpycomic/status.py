@@ -2,10 +2,10 @@
 """
 """
 
-from src.pathclass import PathClass
-from src.jsondata import JSONData
+from getpycomic.pathclass import PathClass
+from getpycomic.jsondata import JSONData
 
-from src.models import Comic
+from getpycomic.models import Comic
 
 from typing import TypeVar
 
@@ -35,6 +35,8 @@ class Status:
         self.comic_name = None  # str
         self.chapter_id = None  # float
         self.imagechapter_id = None  # int
+
+        self.last_chapter = None  # float
 
 
 
@@ -80,6 +82,7 @@ class Status:
             "comic_name": self.comic_name,
             "chapter_id": self.chapter_id,
             "imagechapter_id": self.imagechapter_id,
+            "last_chapter": self.last_chapter,
         }
 
     def to_json(self) -> None:
@@ -115,3 +118,5 @@ class Status:
             self.comic_name = data["comic_name"]
             self.chapter_id = data["chapter_id"]
             self.imagechapter_id = data["imagechapter_id"]
+
+            self.last_chapter = data["last_chapter"]
