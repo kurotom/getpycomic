@@ -91,7 +91,7 @@ def main() -> None:
         "--web",
         choices=Supported_Webs.get_keys(),
         default=Supported_Webs.get_keys()[0],
-        help="Select website."
+        help=f"Select website. Default `{Supported_Webs.get_keys()[0]}`"
     )
 
     main_parser.add_argument(
@@ -127,7 +127,7 @@ def main() -> None:
         "--engine",
         choices=["selenium"],
         default="selenium",
-        help="Select engine to get data."
+        help="Select engine to get data. Default `selenium`."
     )
 
     main_parser.add_argument(
@@ -135,20 +135,13 @@ def main() -> None:
         "--language",
         choices=["en", "es", "br", "it", "ru", "de", "fr"],
         default="es",
-        help="Select language. Default is `es`."
-    )
-
-    main_parser.add_argument(
-        "--preserve",
-        default=True,
-        action="store_false",
-        help="All images files is deleted or not after create CBZ files."
+        help="Select language. Default `es`."
     )
 
     main_parser.add_argument(
         "--no-download",
-        default=True,
-        action="store_false",
+        default=False,
+        action="store_true",
         help="It does not configure the motor and does not prepare it."
     )
 
@@ -186,14 +179,14 @@ def main() -> None:
         "--no-preserve",
         default=True,
         action="store_false",
-        help="Preserve manga/comic images. Default is true."
+        help="Preserve or not the manga/comic images. By default the images are preserved."
     )
 
     main_parser.add_argument(
         "--size",
         default="original",
         choices=["original", "small", "medium", "large"],
-        help="Select the size of the image.Default is `original`."
+        help="Select the size of the image. Default is `original`."
     )
 
 
@@ -219,9 +212,6 @@ def main() -> None:
     volumes = args.volumes
     no_cbz = args.no_cbz
 
-    preserve = args.preserve # =True
-
-
     interactive = args.interactive # False
 
     debug = args.debug
@@ -231,7 +221,7 @@ def main() -> None:
     matrix_dict = parser_volumes(string=volumes)
 
     if debug:
-        print(args)
+        print("> ", args, chapters_dict, matrix_dict)
     if verbose:
         print("> ", chapters_dict, matrix_dict)
 
@@ -242,10 +232,10 @@ def main() -> None:
                                 engine=engine,
                                 language=language,
                                 show=show,
-                                setup=no_download,
+                                setup=True if no_download is False else False,
                                 verbose=verbose,
                             )
-        if no_download:
+        if no_download is False:
             print(f"> Searching in `{web}`...")
             if interactive:
                 selected = selector_interactive(
@@ -257,7 +247,7 @@ def main() -> None:
             else:
                 items = getpycomic.search(search=name, page=1)
                 if items is None:
-                    print(">> An error has occurred.")
+                    print(">> An error has occurred in the search engine.")
                     return
                 if items == []:
                     print(f">> No element found using: `{name}`.\n\n")
@@ -293,6 +283,7 @@ def main() -> None:
             getpycomic.to_json()
 
         else:
+            print(">")
             if isinstance(name, str):
                 selected = getpycomic.build_Comic_from_path(path=name)
                 if selected is None:
@@ -319,7 +310,7 @@ def main() -> None:
             print("> Creating CBZ files.")
             getpycomic.to_cbz(
                             comic=selected,
-                            preserve_images=preserve
+                            preserve_images=no_preserve
                         )
 
             print("\n> Stored in directory: ", selected.path)
