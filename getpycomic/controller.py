@@ -16,7 +16,10 @@ from getpycomic.requests_data import RequestsData
 from getpycomic.pathclass import PathClass
 from getpycomic.status import Status
 
-from getpycomic.utils import get_user_agent
+from getpycomic.utils import (
+    get_user_agent,
+    get_binary_firefox_and_geckodriver_path
+)
 
 from getpycomic.downloader import Downloader
 
@@ -33,9 +36,9 @@ from getpycomic.supported_webs import Supported_Webs
 from time import sleep
 from math import ceil
 import re
-import sys
-from shutil import which
+
 from threading import Lock
+import multiprocessing
 
 import unicodedata
 
@@ -61,6 +64,7 @@ class GetPyComic:
         web: Literal["tmomanga", "zonatmo", "novelcool"] = "tmomanga",
         engine: Literal["selenium", "playwright"] = "selenium",
         language: Literal["en", "es", "br", "it", "ru", "de", "fr"] = "es",
+        binary_firefox_path: str = None,
         show: bool = True,
         setup: bool = True,
         verbose: bool = False,
@@ -71,6 +75,11 @@ class GetPyComic:
         self.verbose = verbose
         self.debug = debug
         self.language = language
+        self.binary_firefox = None
+
+        self.DIRECTORY_GETPYCOMIC = ""
+
+        self.web_site = None
 
         self.scraper = None
 
@@ -83,19 +92,16 @@ class GetPyComic:
         # print('--> ', self.parent_path)
 
         # Selenium
-        if sys.platform == "win32":
-            self.geckodriver_path = PathClass.join(
-                                                self.parent_path,
-                                                "drivers",
-                                                "geckodriver.exe"
+        firefox_geckodriver_paths = get_binary_firefox_and_geckodriver_path(
+                                                parent_path=self.parent_path
                                             )
-        else:
-            self.geckodriver_path = PathClass.join(
-                                                self.parent_path,
-                                                "drivers",
-                                                "geckodriver"
-                                            )
-        self.binary_location = which("firefox")
+
+        binary_location = firefox_geckodriver_paths["firefox_bin_path"]
+        self.geckodriver_path = firefox_geckodriver_paths["geckodriver_path"]
+
+        if binary_firefox_path is not None:
+            self.binary_firefox = binary_firefox_path
+
 
         self.plugins_base = PathClass.join(
                                     self.parent_path,
@@ -114,10 +120,6 @@ class GetPyComic:
                             base_path=self.parent_path,
                             language=self.language,
                         )
-
-        self.DIRECTORY_GETPYCOMIC = ""
-
-        self.web_site = None
 
         self.set_base_dir()
 
@@ -175,7 +177,7 @@ class GetPyComic:
         if engine == "selenium":
             current_scraper = Selenium(
                                     geckodriver=self.geckodriver_path,
-                                    binary=self.binary_location,
+                                    binary=self.binary_firefox,
                                     plugins=self.plugins_paths,
                                     show=self.show,
                                     setup=self.setup,
@@ -305,10 +307,16 @@ class GetPyComic:
         self,
         comic: Comic = None,
         image_size: Literal["original", "small", "medium", "large"] = "original",
-        n_threads: int = 4,
+        n_threads: int = None,
     ) -> None:
         """
         """
+        if n_threads is None:
+            n_threads = max(1, multiprocessing.cpu_count() // 2)
+
+        if self.debug:
+            print(f"> save_comic: n_threads: {n_threads}")
+
         if comic is None:
             comic = self.current_comic
 
@@ -405,7 +413,7 @@ class GetPyComic:
                 downloader_thread.start()
 
 
-        # show progress bar in cli
+        # show progress bar in CLI
         while True:
             with lock:
                 percent = (index_progress[0] / n_images) * 100
@@ -465,7 +473,7 @@ class GetPyComic:
 
         Returns
             dict: returns a dicctionary with volume number as key and `Volume`
-                  insance as value.
+                  instance as value.
         """
         # print(volumes_dict_chapters, chapters_by_volume, comic)
         if isinstance(comic, str):
@@ -594,7 +602,7 @@ class GetPyComic:
         """
         for chapter in list_chapters:
             # print('--> ', PathClass.absolute_path(path=chapter.path))
-            PathClass.delete(
+            PathClass.delete_directory(
                     path=PathClass.absolute_path(path=chapter.path)
                 )
 
@@ -647,7 +655,7 @@ class GetPyComic:
                                 ImageChapter(
                                         id=int(PathClass.splitext(img)[0]),
                                         name=PathClass.splitext(img)[0],
-                                        extention=PathClass.splitext(img)[1],
+                                        extension=PathClass.splitext(img)[1],
                                         link=None,
                                         path=PathClass.join(chapter_path, img),
                                     )

@@ -189,6 +189,11 @@ def main() -> None:
         help="Select the size of the image. Default is `original`."
     )
 
+    main_parser.add_argument(
+        "--firefox-bin",
+        default=None,
+        help="Binary path of Firefox."
+    )
 
 
     args = main_parser.parse_args()
@@ -216,7 +221,10 @@ def main() -> None:
 
     debug = args.debug
 
+    firefox_bin = args.firefox_bin
 
+
+####
     chapters_dict = parser_chapter(string=chapter)
     matrix_dict = parser_volumes(string=volumes)
 
@@ -234,6 +242,7 @@ def main() -> None:
                                 show=show,
                                 setup=True if no_download is False else False,
                                 verbose=verbose,
+                                binary_firefox_path=firefox_bin,
                             )
         if no_download is False:
             print(f"> Searching in `{web}`...")

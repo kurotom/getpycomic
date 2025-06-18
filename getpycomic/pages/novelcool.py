@@ -52,7 +52,7 @@ class NovelCool(metaclass=BaseMeta):
         "div.chp-item:nth-child(n)",  # class selector
     ]
 
-    chaper_name_class = "div > div > span:nth-child(1)"
+    chapter_name_class = "div > div > span:nth-child(1)"
     chapter_link_class = "a:nth-child(1)"
 #
 
@@ -65,7 +65,7 @@ class NovelCool(metaclass=BaseMeta):
     # index pages
     index_pages = ".btn > span:nth-child(1) > em:nth-child(1) > a:nth-child(1)"
     # select
-    seleted_tag = ".change_pic_no"
+    selected_tag = ".change_pic_no"
     # option load 1 images
     options_select = "option:nth-child(n)"
     # # option load 10 images

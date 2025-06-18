@@ -26,7 +26,7 @@ class ImageChapter:
         self,
         id: int,
         name: str,
-        extention: str,
+        extension: str,
         link: str,
         path: str = None,
     ) -> None:
@@ -34,14 +34,14 @@ class ImageChapter:
         """
         self.id = id
         self.name = name
-        self.extention = extention
+        self.extension = extension
         self.link = link
         self.path = path
 
     def get_name(self) -> str:
         """
         """
-        return "%03d%s" % (self.id, self.extention)
+        return "%03d%s" % (self.id, self.extension)
 
     def to_dict(self) -> dict:
         """
@@ -49,7 +49,7 @@ class ImageChapter:
         return {
             "id": self.id,
             "name": self.name,
-            "extention": self.extention,
+            "extension": self.extension,
             "link": self.link,
             "path": self.path
         }
@@ -61,7 +61,7 @@ class ImageChapter:
         return ImageChapter(
             id=data["id"],
             name=data["name"],
-            extention=data["extention"],
+            extension=data["extension"],
             link=data["link"],
             path=data.get("path")
         )

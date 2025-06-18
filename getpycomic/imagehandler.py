@@ -42,7 +42,7 @@ class ImagesHandler:
         size: str = 'original'
     ) -> tuple:
         """
-        Returns tupe of size.
+        Returns tuple of size.
 
         Args
             size: string indicating the new size of the image.
@@ -58,7 +58,7 @@ class ImagesHandler:
     @staticmethod
     def new_image(
         currentImage: bytes,
-        extention: str = "jpeg",
+        extension: str = "jpeg",
         sizeImage: Literal["original", "small", "medium", "large"] = "original",
     ) -> io.BytesIO:
         """
@@ -66,7 +66,7 @@ class ImagesHandler:
 
         Args:
             currentImage: bytes of image.
-            extention: extention of new image.
+            extension: extension of new image.
             sizeImage: category of size to resize original image. Default is
                        'original'.
 
@@ -90,7 +90,7 @@ class ImagesHandler:
 
             imageResized.save(
                     newImageIO,
-                    format=extention,
+                    format=extension,
                     quality=100
                 )
 

@@ -40,7 +40,7 @@ class ZonaTmo(metaclass=BaseMeta):
         ".list-group-item.upload-link"
     ]
 
-    chaper_name_class = ".px-2.py-3.m-0"  # class selector
+    chapter_name_class = ".px-2.py-3.m-0"  # class selector
     chapter_link_class = ".btn.btn-default.btn-sm"  # class selector
 #
 
@@ -55,7 +55,7 @@ class ZonaTmo(metaclass=BaseMeta):
     # index pages
     index_pages = None
     # select
-    seleted_tag = None
+    selected_tag = None
     # option load 1 images
     option_selected = None
 #

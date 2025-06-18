@@ -46,7 +46,7 @@ $ pip install getpycomic
 $ getpycomic --help
 usage: getpycomic [-h] -n NAME_OR_PATH [NAME_OR_PATH ...] [-w {tmomanga,zonatmo,novelcool}] [-c CHAPTER] [-v VOLUMES [VOLUMES ...]] [--no-cbz]
                   [-e {selenium}] [-l {en,es,br,it,ru,de,fr}] [--no-download] [-s] [--verbose] [-i] [--debug] [--no-preserve]
-                  [--size {original,small,medium,large}]
+                  [--size {original,small,medium,large}] [--firefox-bin FIREFOX_BIN]
 
 Gets manga/comic from web to CBZ files.
 
@@ -59,8 +59,8 @@ optional arguments:
   -c CHAPTER, --chapter CHAPTER
                         Chapters: `all`, `1,5`, `5+` `1-5`. Default `all`.
   -v VOLUMES [VOLUMES ...], --volumes VOLUMES [VOLUMES ...]
-                        Indicate how the chapters will be put together by volume in the CBZ file. By default, each volume has `6` chapters. For example:
-                        1:[1,4],2:[5,9]
+                        Indicate how the chapters will be put together by volume in the CBZ file. By default, each volume has `6` chapters. For
+                        example: 1:[1,4],2:[5,9]
   --no-cbz              It only downloads chapters and does not create CBZ files.
   -e {selenium}, --engine {selenium}
                         Select engine to get data. Default `selenium`.
@@ -74,12 +74,14 @@ optional arguments:
   --no-preserve         Preserve or not the manga/comic images. By default the images are preserved.
   --size {original,small,medium,large}
                         Select the size of the image. Default is `original`.
+  --firefox-bin FIREFOX_BIN
+                        Binary path of Firefox.
 
 You can read your manga/comics wherever you want.
 ```
 
-Image `--size`:
-  * `original`: preserves original sizes.
+Image sizes (`--size`):
+  * `original`: retains original sizes.
   * `small`: 800x1200.
   * `medium`: 1000x1500.
   * `large`: 1200x1800.
@@ -96,7 +98,11 @@ $ getpycomic --name_or_path MANGA_NAME --web zonatmo
 * gets all available chapters of "MANGA_NAME" from "zonatmo", all images are stored with `small` size and builds CBZ files with specific chapters.
 
 ```bash
-$ getpycomic --name_or_path MANGA_NAME --web zonatmo --chapter all --size small --volumes 1: [1, 15],2: [16, 30],3: [31, 45],4: [46, 60],5: [61, 74]
+$ getpycomic --name_or_path MANGA_NAME --web zonatmo --chapter all --size small --volumes 1: [1, 15],2: [16, 30],3: [31, 45]
+```
+or
+```bash
+$ getpycomic --name_or_path MANGA_NAME --web zonatmo --chapter all --size small --volumes 1:[1,15],2:[16,30],3:[31,45]
 ```
 
 * convert image directory to CBZ files. Using `--volumes` you can specify chapters per volume, if omitted, 6 chapters per volume will be used.
@@ -104,7 +110,7 @@ $ getpycomic --name_or_path MANGA_NAME --web zonatmo --chapter all --size small 
 ```bash
 $ getpycomic --name_or_path /path/DIRECTORY --no-download
 ```
-
+or
 ```bash
 $ getpycomic --name_or_path /path/DIRECTORY --no-download --volumes 1:[1,3]
 ```

@@ -39,7 +39,7 @@ class TmoManga(metaclass=BaseMeta):
 
     ]
 
-    chaper_name_class = "a:nth-child(1)"  # class selector
+    chapter_name_class = "a:nth-child(1)"  # class selector
     chapter_link_class = None  # class selector
 #
 
@@ -56,7 +56,7 @@ class TmoManga(metaclass=BaseMeta):
     # index pages
     index_pages = None
     # select
-    seleted_tag = None
+    selected_tag = None
     # option load 1 images
     option_selected = None
 #

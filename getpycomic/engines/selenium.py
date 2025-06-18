@@ -32,6 +32,7 @@ from uuid import uuid4
 import random
 from math import ceil
 from queue import Queue
+import multiprocessing
 
 from getpycomic.engines.base import Base
 
@@ -394,8 +395,10 @@ class Selenium(Base):
                 if "novelcool" in url and "novel" in name.lower():
                     continue
 
+                name = name.split("\n")[0].title().replace(" ", "_")
+                name = name.replace(":", "-")
                 comic = Comic(
-                        name=name.split("\n")[0].title().replace(" ", "_"),
+                        name=name,
                         original_name=name.split("\n")[0],
                         link=link
                     )
@@ -476,7 +479,7 @@ class Selenium(Base):
                 try:
                     a_item_ = li_item_.find_element(
                                                 By.CSS_SELECTOR,
-                                                webclass.chaper_name_class
+                                                webclass.chapter_name_class
                                             )
 
                 except NoSuchElementException as e:
@@ -642,7 +645,7 @@ class Selenium(Base):
 
                 select_element = self.wait_for_element(
                                             type="css_selector",
-                                            html_element=webclass.seleted_tag
+                                            html_element=webclass.selected_tag
                                         )
                 # print(select_element)
 
@@ -754,7 +757,7 @@ class Selenium(Base):
             image = ImageChapter(
                                 id=id_,
                                 name=name_,
-                                extention=ext_,
+                                extension=ext_,
                                 link=url_image
                             )
             # print(image)
@@ -769,12 +772,15 @@ class Selenium(Base):
         self,
         comicObj: Comic,
         webclass: object,
-        n_threads: int = 4
+        n_threads: int = None
     ) -> None:
         """
         """
+        if n_threads is None:
+            n_threads = max(1, multiprocessing.cpu_count() // 2)
+
         if self.debug:
-            print("> to_thread_scraping")
+            print(f"> to_thread_scraping: n_threads: {n_threads}")
 
         cookies = self.driver.get_cookies()
 
@@ -793,7 +799,7 @@ class Selenium(Base):
             chunk = comicObj.chapters[0 + i : i + range_chapters]
 
             # new instance Selenium class
-            scraperInstace = Selenium(
+            scraperInstance = Selenium(
                                     geckodriver=self.geckodriver,
                                     binary=self.binary,
                                     plugins=self.plugins,
@@ -805,11 +811,11 @@ class Selenium(Base):
 
             # pass to thread:
             #       Selenium instance without setup
-            #       queue to store Chapters intances with new data
+            #       queue to store Chapters instances with new data
             #       chunk_chapters chunk of chapters for this thread
             #       webclass template
             th = ThreadSelenium(
-                            scraper=scraperInstace,
+                            scraper=scraperInstance,
                             comicObj=comicObj,
                             cookies=cookies,
                             webclass=webclass,
@@ -830,7 +836,7 @@ class Selenium(Base):
             th.join()
             sleep(0.5)
 
-        # copy `Chapter` intances on list
+        # copy `Chapter` instances on list
         items = []
         while not queue.empty():
             items.append(queue.get())

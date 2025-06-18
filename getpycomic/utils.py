@@ -1,9 +1,51 @@
 # -*- coding: utf-8 -*-
 """
 """
-
+from getpycomic.pathclass import PathClass
 from fake_useragent import UserAgent
+
+from shutil import which
+import sys
 import re
+
+
+def get_binary_firefox_and_geckodriver_path(
+    parent_path: str
+) -> tuple:
+    """
+    """
+    binary_location = which("firefox")
+    geckodriver_path = ""
+
+    if sys.platform == "win32":
+
+        if not binary_location:
+            path_windows = [
+                            "C:\\Program Files\\Mozilla Firefox\\firefox.exe",
+                            "C:\\Program Files (x86)\\Mozilla Firefox\\firefox.exe"
+                        ]
+            for path_bin in path_windows:
+                if PathClass.exists(path_bin):
+                    binary_location = path_bin
+                    break
+
+
+        geckodriver_path = PathClass.join(
+                                            parent_path,
+                                            "drivers",
+                                            "geckodriver.exe"
+                                        )
+
+    else:
+        geckodriver_path = PathClass.join(
+                                            parent_path,
+                                            "drivers",
+                                            "geckodriver"
+                                        )
+    return {
+        "firefox_bin_path": binary_location,
+        "geckodriver_path": geckodriver_path,
+    }
 
 
 def normalize_number(
@@ -30,7 +72,6 @@ def get_user_agent() -> str:
         platforms="desktop"
     )
     return ua.random
-
 
 
 def parser_volumes(
@@ -68,6 +109,7 @@ def parser_volumes(
         except Exception as e:
             pass
     return {"matrix": matrix}
+
 
 def parser_chapter(
     string: str,

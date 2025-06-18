@@ -49,11 +49,11 @@ class Downloader(Thread):
             for image in chapter.images:
                 # image.id
                 # image.name
-                # image.extention
+                # image.extension
                 # image.link
-                # print(image.name, image.extention)
+                # print(image.name, image.extension)
 
-                image.extention = '.jpg'
+                image.extension = '.jpg'
 
                 image_path_ = PathClass.join(
                                             chapter.path,
@@ -72,7 +72,7 @@ class Downloader(Thread):
                     if data is not None:
                         new_image_data_ = self.imagehandler.new_image(
                                                     currentImage=data,
-                                                    extention="jpeg",
+                                                    extension="jpeg",
                                                     # sizeImage='small'
                                                     sizeImage=self.sizeImage
                                                 )
