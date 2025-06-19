@@ -4,7 +4,7 @@
 
 Searches and obtains the manga/comic images and generates a *CBZ* file. Allows to group the chapters by volumes.
 
-By default, it compiles 6 chapters per volume or if you want to know the volumes and chapters. For more information on chapters by volume, [https://comick.io](https://comick.io).
+By default, it uses 6 chapters per volume or if you want to know the volumes and chapters you can consult that information at [https://comick.io](https://comick.io).
 
 It also allows to convert directories with manga/comic images into CBZ files. Internal directory structure you must have:
 

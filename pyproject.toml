@@ -6,6 +6,8 @@ authors = ["kurotom <55354389+kurotom@users.noreply.github.com>"]
 readme = "README.md"
 packages = [{include = "getpycomic"}]
 keywords = ["comic", "manga", "cbz", "scraping", "selenium"]
+license = "MIT"
+repository = "https://github.com/kurotom/getpycomic"
 classifiers = [
 "Operating System :: OS Independent",
 "Programming Language :: Python :: 3.9",
@@ -28,3 +30,6 @@ getpycomic = 'getpycomic.cli:main'
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.urls]
+"Bug Tracker" = "https://github.com/kurotom/getpycomic/issues"
