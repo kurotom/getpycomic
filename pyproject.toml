@@ -1,10 +1,18 @@
 [tool.poetry]
 name = "getpycomic"
 version = "0.1.0"
-description = ""
+description = "Take the manga/comics wherever you want."
 authors = ["kurotom <55354389+kurotom@users.noreply.github.com>"]
 readme = "README.md"
 packages = [{include = "getpycomic"}]
+keywords = ["comic", "manga", "cbz", "scraping", "selenium"]
+classifiers = [
+"Operating System :: OS Independent",
+"Programming Language :: Python :: 3.9",
+"Programming Language :: Python :: 3.10",
+"Programming Language :: Python :: 3.11",
+"Programming Language :: Python :: 3.12"
+]
 
 [tool.poetry.dependencies]
 python = "^3.9"

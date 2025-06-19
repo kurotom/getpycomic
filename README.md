@@ -1,5 +1,7 @@
 # getpycomic
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
 Searches and obtains the manga/comic images and generates a *CBZ* file. Allows to group the chapters by volumes.
 
 By default, it compiles 6 chapters per volume or if you want to know the volumes and chapters. For more information on chapters by volume, [https://comick.io](https://comick.io).
@@ -26,9 +28,9 @@ All images and CBZ files are stored on the current user's desktop.
 
 ## Supported pages
 
-  * [tmomanga](https://tmomanga.com/)
-  * [zonatmo](https://zonatmo.com/)
-  * [novelcool](https://novelcool.com/)
+- [tmomanga](https://tmomanga.com/)
+- [zonatmo](https://zonatmo.com/)
+- [novelcool](https://novelcool.com/)
 
 To request new pages, make a new `issue` with `enhancement` tag.
 
@@ -41,6 +43,14 @@ To request new pages, make a new `issue` with `enhancement` tag.
 > You must have [Firefox](https://www.mozilla.org/) installed.
 It will search the default paths of *Firefox*. If it is not found or installed in another path, use the `--firefox-bin` argument and the full path to the executable.
 
+> [!IMPORTANT]
+> **DISCLAIMER:**  
+> This application does not host, distribute, or store any copyrighted content.
+> It is a technical tool intended for personal or educational purposes only.
+> The author is not responsible for any misuse or legal consequences resulting from its use.
+
+
+<br>
 
 # Installation
 
@@ -141,3 +151,8 @@ Windows
 ```bash
 $ getpycomic --name_or_path MANGA_NAME --firefox-bin \path\firefox.exe
 ```
+
+
+# License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
