@@ -22,15 +22,24 @@ DIRECTORY
     └── 003.jpg
 ```
 
-Supported pages:
+All images and CBZ files are stored on the current user's desktop.
+
+## Supported pages
+
   * [tmomanga](https://tmomanga.com/)
   * [zonatmo](https://zonatmo.com/)
   * [novelcool](https://novelcool.com/)
 
 To request new pages, make a new `issue` with `enhancement` tag.
 
+<br>
+
 > [!NOTE]
 > This project aims to give you the possibility to take this entertainment wherever you go, even without an Internet connection.
+
+> [!IMPORTANT]
+> You must have [Firefox](https://www.mozilla.org/) installed.
+It will search the default paths of *Firefox*. If it is not found or installed in another path, use the `--firefox-bin` argument and the full path to the executable.
 
 
 # Installation
@@ -74,17 +83,22 @@ optional arguments:
   --no-preserve         Preserve or not the manga/comic images. By default the images are preserved.
   --size {original,small,medium,large}
                         Select the size of the image. Default is `original`.
-  --firefox-bin FIREFOX_BIN
+   FIREFOX_BIN
                         Binary path of Firefox.
 
 You can read your manga/comics wherever you want.
 ```
 
-Image sizes (`--size`):
-  * `original`: retains original sizes.
-  * `small`: 800x1200.
-  * `medium`: 1000x1500.
-  * `large`: 1200x1800.
+## Image sizes
+
+Available options used by the `--size` argument:
+
+| Options | Sizes |
+|-|-|
+| `original` | retains original sizes |
+| `small` | 800x1200 |
+| `medium` | 1000x1500 |
+| `large` | 1200x1800 |
 
 
 # Examples
@@ -113,4 +127,17 @@ $ getpycomic --name_or_path /path/DIRECTORY --no-download
 or
 ```bash
 $ getpycomic --name_or_path /path/DIRECTORY --no-download --volumes 1:[1,3]
+```
+
+* Pass the *Firefox* binary path.
+
+Linux
+```bash
+$ getpycomic --name_or_path MANGA_NAME --firefox-bin /path/firefox
+```
+
+Windows
+
+```bash
+$ getpycomic --name_or_path MANGA_NAME --firefox-bin \path\firefox.exe
 ```
