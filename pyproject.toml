@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "getpycomic"
-version = "0.1.0"
+version = "0.1.1"
 description = "Take the manga/comics wherever you want."
 authors = ["kurotom <55354389+kurotom@users.noreply.github.com>"]
 readme = "README.md"
