@@ -20,7 +20,7 @@ classifiers = [
 python = "^3.9"
 selenium = "^4.22.0"
 requests = "^2.32.3"
-pillow = "^10.4.0"
+pillow = "^11.0"
 platformdirs = "^4.3.7"
 fake-useragent = "^2.2.0"
 
