@@ -66,6 +66,16 @@ class ImageChapter:
             path=data.get("path")
         )
 
+    def __lt__(self, obj):
+        """
+        """
+        return isinstance(obj, ImageChapter) and self.id < obj.id
+
+    def __eq__(self, obj):
+        """
+        """
+        return isinstance(obj, ImageChapter) and self.id == obj.id
+
     def __str__(self) -> str:
         """
         """
@@ -131,10 +141,37 @@ class Chapter:
             path=data.get("path")
         )
 
+    def update_list_images(
+        self,
+        images_list: list,
+    ) -> None:
+        """
+        """
+        self.images = []
+        self.images = images_list
+
+    def create_image(
+        self,
+        id: int,
+        name: str,
+        extension: str,
+        link: str,
+        path: str = None,
+    ) -> ImageChapter:
+        """
+        """
+        return ImageChapter(
+                        id=id,
+                        name=name,
+                        extension=extension,
+                        link=link,
+                        path=path,
+                    )
+
     def __lt__(self, obj):
         """
         """
-        return self.id < obj.id
+        return isinstance(obj, Chapter) and self.id < obj.id
 
     def __str__(self) -> str:
         """

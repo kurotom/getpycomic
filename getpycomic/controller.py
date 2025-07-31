@@ -231,6 +231,7 @@ class GetPyComic:
                                 if not unicodedata.combining(c)
                             ]
                         )
+
             search = search.replace(" ", "+").replace(".", "")
 
             search = search + f"&page={page}"
@@ -306,6 +307,7 @@ class GetPyComic:
     def save_comic(
         self,
         comic: Comic = None,
+        is_webcomic: bool = False,
         image_size: Literal["original", "small", "medium", "large"] = "original",
         n_threads: int = None,
     ) -> None:
@@ -382,6 +384,7 @@ class GetPyComic:
                                         chunk_chapters=comic.chapters,
                                         header=header_request,
                                         sizeImage=image_size,
+                                        is_webcomic=is_webcomic,
                                         debug=self.debug,
                                         daemon=True,
                                         lock=lock,
@@ -402,6 +405,7 @@ class GetPyComic:
                                             chunk_chapters=chunk,
                                             header=header_request,
                                             sizeImage=image_size,
+                                            is_webcomic=is_webcomic,
                                             debug=self.debug,
                                             daemon=True,
                                             lock=lock,
@@ -678,7 +682,8 @@ class GetPyComic:
         """
         if self.debug or self.verbose:
             print("Save status on json.")
-        self.status.to_json()
+        if self.current_comic is not None:
+            self.status.to_json()
 
     def to_load(self) -> None:
         """
@@ -702,3 +707,15 @@ class GetPyComic:
         """
         """
         return "<[ %s ]>" % self.__str__()
+
+    def __enter__(self) -> None:
+        """
+        """
+        return self
+
+    def __exit__(self, exc_type, exc_value, traceback) -> None:
+        """
+        """
+        if self.current_comic is not None:
+            self.to_json()
+        self.close_scraper()

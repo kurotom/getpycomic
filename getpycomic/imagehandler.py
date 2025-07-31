@@ -14,6 +14,7 @@ import io
 from typing import (
         TypeVar,
         Union,
+        List,
         Literal
     )
 
@@ -71,7 +72,7 @@ class ImagesHandler:
                        'original'.
 
         Returns:
-
+            io.BytesIO: instance io.BytesIO with data of new image.
         """
         size_tuple = ImagesHandler.get_size(size=sizeImage)
         newImageIO = io.BytesIO()
@@ -113,3 +114,75 @@ class ImagesHandler:
         except Exception as e:
             print("Error: ImagesHandler", e)
             return False
+
+
+    @staticmethod
+    def crop(
+        data: bytes,
+        sizeImage: Literal["original", "small", "medium", "large"] = "original",
+    ) -> Union[List[io.BytesIO], list]:
+        """
+        Crop images to the supported size.
+
+        Args
+            data: image data on bytes.
+            sizeImage: category of size to resize original image. Default is
+                       'original'.
+        Returns
+            list: list of `io.BytesIO` o empty list.
+        """
+        if sizeImage == "original":
+            return []
+
+        images = []
+
+        size_tuple_final = ImagesHandler.get_size(size=sizeImage)
+
+        # default size to crop large image.
+        width_size = size_tuple_final[0]#ImagesHandler.get_size(size='small')[0]
+        height_size = size_tuple_final[1]#ImagesHandler.get_size(size='small')[1]
+
+        with Image.open(data) as image_:
+            image_ = image_.convert('RGB')
+
+            current_img_width, current_img_height = image_.size
+
+            image_ = image_.resize((width_size, current_img_height))
+
+            sizes_array = [
+                        i for i in range(0, current_img_height, height_size)
+                    ]
+
+            # print(sizes_array)
+
+            for i in range(len(sizes_array)):
+                newImageIO = io.BytesIO()
+                try:
+                    box = (0, sizes_array[i], width_size, sizes_array[i + 1])
+                    chunk = image_.crop(box)
+
+                except IndexError as e:
+                    # fills with white background to complete image height size
+                    box = (0, sizes_array[i], width_size, current_img_height)
+                    chunk = Image.new(
+                                    'RGB',
+                                    (width_size, height_size),
+                                    (255,255,255)
+                                )
+                    chunk.paste(image_.crop(box), (0, 0))
+
+                # resize to the requested size
+                chunk = chunk.resize(size_tuple_final)
+
+                # chunk.show()
+                # input()
+
+                chunk.save(
+                        newImageIO,
+                        format="jpeg",
+                        quality=100
+                )
+
+                images.append(newImageIO)
+
+        return images

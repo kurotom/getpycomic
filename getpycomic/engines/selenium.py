@@ -395,8 +395,11 @@ class Selenium(Base):
                 if "novelcool" in url and "novel" in name.lower():
                     continue
 
-                name = name.split("\n")[0].title().replace(" ", "_")
-                name = name.replace(":", "-")
+                name = name.split("\n")[0].title()
+                name = name.replace(" ", "_")
+                # name = name.replace(":", "-").replace("/", "-")
+                name = re.sub(r'\:|\/', "-", name)
+
                 comic = Comic(
                         name=name,
                         original_name=name.split("\n")[0],

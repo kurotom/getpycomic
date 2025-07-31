@@ -190,6 +190,14 @@ def main() -> None:
     )
 
     main_parser.add_argument(
+        "--webcomic",
+        default=False,
+        action="store_true",
+        help="If it is a webcomic/webtoon."
+    )
+
+
+    main_parser.add_argument(
         "--firefox-bin",
         default=None,
         help="Binary path of Firefox."
@@ -221,6 +229,8 @@ def main() -> None:
 
     debug = args.debug
 
+    webcomic = args.webcomic
+
     firefox_bin = args.firefox_bin
 
 
@@ -234,100 +244,102 @@ def main() -> None:
         print("> ", chapters_dict, matrix_dict)
 
     getpycomic = None
-    try:
-        getpycomic = GetPyComic(
-                                web=web,
-                                engine=engine,
-                                language=language,
-                                show=show,
-                                setup=True if no_download is False else False,
-                                verbose=verbose,
-                                binary_firefox_path=firefox_bin,
-                            )
-        if no_download is False:
-            print(f"> Searching in `{web}`...")
-            if interactive:
-                selected = selector_interactive(
-                                            controller=getpycomic,
-                                            search=name,
-                                            page=1
-                                        )
 
-            else:
-                items = getpycomic.search(search=name, page=1)
-                if items is None:
-                    print(">> An error has occurred in the search engine.")
-                    return
-                if items == []:
-                    print(f">> No element found using: `{name}`.\n\n")
-                    getpycomic.close_scraper()
-                    return
+    with GetPyComic(
+        web=web,
+        engine=engine,
+        language=language,
+        show=show,
+        setup=True if no_download is False else False,
+        verbose=verbose,
+        binary_firefox_path=firefox_bin,
+    ) as getpycomic:
+        try:
+            if no_download is False:
+                print(f"> Searching in `{web}`...")
+                if interactive:
+                    selected = selector_interactive(
+                                                controller=getpycomic,
+                                                search=name,
+                                                page=1
+                                            )
 
-                # selected first item
-                selected = items[0]
+                else:
+                    items = getpycomic.search(search=name, page=1)
+                    if items is None:
+                        print(">> An error has occurred in the search engine.")
+                        return
+                    if items == []:
+                        print(f">> No element found using: `{name}`.\n\n")
+                        getpycomic.close_scraper()
+                        return
 
-            if debug:
-                print(">> Selected element: ", selected)
+                    # selected first item
+                    selected = items[0]
 
-            print("> Getting chapters...")
-            getpycomic.get_chapters(
-                                comic=selected,
-                                n_chapters=chapters_dict["n_chapters"],
-                                range=chapters_dict["range"],
-                                update=chapters_dict["update"]
-                            )
+                if debug:
+                    print(">> Selected element: ", selected)
 
-            if debug:
-                print(">> ", selected)
+                print("> Getting chapters...")
+                getpycomic.get_chapters(
+                                    comic=selected,
+                                    n_chapters=chapters_dict["n_chapters"],
+                                    range=chapters_dict["range"],
+                                    update=chapters_dict["update"]
+                                )
 
-            getpycomic.close_scraper()
+                if debug:
+                    print(">> ", selected)
 
-            print("> Downloading...")
-            getpycomic.save_comic(
-                                comic=selected,
-                                image_size=size_image,
-                                n_threads=4,
-                            )
-
-            getpycomic.to_json()
-
-        else:
-            print(">")
-            if isinstance(name, str):
-                selected = getpycomic.build_Comic_from_path(path=name)
-                if selected is None:
-                    msg = f"\nThe given path `{name}` does not exist or does"
-                    msg = msg + " not have images of the chapters.\n"
-                    print(msg)
-                    getpycomic.close_scraper()
-                    return
-            else:
                 getpycomic.close_scraper()
-                return
 
-        if no_cbz is False:
-            print("> Sorting volumes and chapters")
-            getpycomic.sorter_by_volumes(
-                comic=selected,
-                chapters_by_volume=None,
-                volumes_dict_chapters=matrix_dict["matrix"]
-            )
+                print("> Downloading...")
+                getpycomic.save_comic(
+                                    comic=selected,
+                                    is_webcomic=webcomic,
+                                    image_size=size_image,
+                                    n_threads=4,
+                                )
 
-            if debug:
-                print(">> Volumes: ", selected.volumes)
+                getpycomic.to_json()
 
-            print("> Creating CBZ files.")
-            getpycomic.to_cbz(
-                            comic=selected,
-                            preserve_images=no_preserve
-                        )
+            else:
+                if isinstance(name, str):
+                    selected = getpycomic.build_Comic_from_path(path=name)
+                    if selected is None:
+                        msg = f"\nThe given path `{name}` does not exist or does"
+                        msg = msg + " not have images of the chapters.\n"
+                        print(msg)
+                        getpycomic.close_scraper()
+                        return
+                else:
+                    getpycomic.close_scraper()
+                    return
 
-            print("\n> Stored in directory: ", selected.path)
+            if no_cbz is False:
+                print("> Sorting volumes and chapters")
+                getpycomic.sorter_by_volumes(
+                    comic=selected,
+                    chapters_by_volume=None,
+                    volumes_dict_chapters=matrix_dict["matrix"]
+                )
 
-    except KeyboardInterrupt:
-        if getpycomic is not None:
-            getpycomic.to_json()
-            getpycomic.close_scraper()
+                if debug:
+                    print(">> Volumes: ", selected.volumes)
+
+                print("> Creating CBZ files.")
+                getpycomic.to_cbz(
+                                comic=selected,
+                                preserve_images=no_preserve
+                            )
+
+                print("\n> Stored in directory: ", selected.path)
+                print()
+
+        except KeyboardInterrupt as e:
+            if getpycomic is not None:
+                getpycomic.to_json()
+                getpycomic.close_scraper()
 
 
 if __name__ == '__main__':

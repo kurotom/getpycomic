@@ -65,7 +65,7 @@ $ pip install getpycomic
 $ getpycomic --help
 usage: getpycomic [-h] -n NAME_OR_PATH [NAME_OR_PATH ...] [-w {tmomanga,zonatmo,novelcool}] [-c CHAPTER] [-v VOLUMES [VOLUMES ...]] [--no-cbz]
                   [-e {selenium}] [-l {en,es,br,it,ru,de,fr}] [--no-download] [-s] [--verbose] [-i] [--debug] [--no-preserve]
-                  [--size {original,small,medium,large}] [--firefox-bin FIREFOX_BIN]
+                  [--size {original,small,medium,large}] [--webcomic] [--firefox-bin FIREFOX_BIN]
 
 Gets manga/comic from web to CBZ files.
 
@@ -93,7 +93,8 @@ optional arguments:
   --no-preserve         Preserve or not the manga/comic images. By default the images are preserved.
   --size {original,small,medium,large}
                         Select the size of the image. Default is `original`.
-   FIREFOX_BIN
+  --webcomic            If it is a webcomic/webtoon.
+  --firefox-bin FIREFOX_BIN
                         Binary path of Firefox.
 
 You can read your manga/comics wherever you want.
@@ -117,6 +118,12 @@ Available options used by the `--size` argument:
 
 ```bash
 $ getpycomic --name_or_path MANGA_NAME --web zonatmo
+```
+
+* gets all chapters of webcomic/webtoon and create volumes with 6 chapter.
+
+```bash
+$ getpycomic --name_or_path MANGA_NAME --web zonatmo --webcomic
 ```
 
 * gets all available chapters of "MANGA_NAME" from "zonatmo", all images are stored with `small` size and builds CBZ files with specific chapters.
