@@ -43,6 +43,11 @@ class PathClass:
     ) -> str:
         return platformdirs.user_config_dir(name)
 
+    def user_log_dir(
+        dir: str
+    ) -> str:
+        return platformdirs.user_log_dir(dir)
+
     def openfile(
         path: str
     ) -> None:
